@@ -59,8 +59,17 @@ class AuthController extends Controller
             if($validator->fails()){
                 return $this->response(false,null,$validator->messages()->all(),300);
             }
-            // dd($validator->validated());
+            if($request->hasFile('identity_image'))
+            {
+                $fileName = time().'.'.$request->identity_image->extension();  
+     
+                $request->identity_image->move(public_path('images/nic'), $fileName);
+
+                $request['identity_image'] = $fileName;
+            }
+
             $request['password'] = Hash::make($request->password);
+
             $user = User::create($request->all());
 
             if(!$user)
