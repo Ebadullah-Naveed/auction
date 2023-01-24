@@ -20,11 +20,11 @@ class UserSeeder extends Seeder
             'name' => 'Admin',
             'username' => 'superadmin',
             'email' => 'admin@admin.com',
-            'phone_number' => '',
+            'mobile_number' => '03000000001',
             'role_id' => '1',
             // Admin@123
             'password' => '$2y$10$Fgw2mcZUwMDuYgkDuwxuM.z6Vr7ZxhdhE0QQk1tXFtbs9yqQG75bC',
-            'avatar' => 'profile_pictures/avatar.png',
+            'image' => 'profile_pictures/avatar.png',
             'status' => 1
         ]);
     }
