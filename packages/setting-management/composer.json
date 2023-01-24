@@ -1,0 +1,20 @@
+{
+    "name": "setting-management",
+    "description": "Package created for setting management",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+      {
+        "name": "Shahzaib Ahmed Siddiqui",
+        "email": "shahzaibmehfooz86@gmail.com"
+      }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+          "SettingManagement\\": "src/"
+        }
+      }
+
+  }

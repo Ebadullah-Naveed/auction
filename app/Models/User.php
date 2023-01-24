@@ -50,4 +50,14 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    // Relationships
+    public function role(){
+        return $this->belongsTo('App\Models\Role','role_id');
+    }
+
+    public function products(){
+        return $this->hasMany('App\Models\Product','user_id');
+    }
+
 }
