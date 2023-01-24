@@ -1,0 +1,19 @@
+{
+    "name": "user-management",
+    "description": "User management package for admin panel",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Shahzaib Ahmed Siddiqui",
+            "email": "shahzaibmehfooz86@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+      "psr-4": {
+        "UserManagement\\": "src/"
+      }
+    }
+}​
