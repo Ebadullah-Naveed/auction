@@ -15,16 +15,30 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('full_name');
-            $table->string('email')->unique();
+            $table->bigInteger('role_id');
+            $table->string('name',100);
+            $table->string('email',100)->unique();
+            $table->string('username',50)->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('mobile_number')->unique();
-            $table->string('user_name')->unique();
+            $table->string('mobile_number',20)->unique();
+
+            $table->string('cnic',20)->unique()->nullable();
+            $table->string('cnic_front_image')->nullable();
+            $table->string('cnic_back_image')->nullable();
+
             $table->string('password');
-            $table->string('perferred_language');
-            $table->string('otp')->nullable();
-            $table->string('identity_image')->nullable();
-            $table->boolean('status')->default(true);
+            $table->string('language',20)->nullable();
+            $table->string('image')->nullable();
+            $table->string('fcm_token')->nullable();
+            $table->string('otp',10)->nullable();
+
+            $table->date('date_joined')->nullable();
+            $table->timestamp('last_login')->nullable();
+            $table->string('last_login_ip',20)->nullable();
+
+            $table->boolean('status')->default(0);
+            $table->boolean('is_email_verified')->default(0);
+            $table->boolean('is_phone_verified')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

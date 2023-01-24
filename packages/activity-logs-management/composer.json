@@ -1,0 +1,19 @@
+{
+    "name": "activity-logs-management",
+    "description": "Activity logs management package for admin panel",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Shahzaib Ahmed Siddiqui",
+            "email": "shahzaib.ahmed@nextgeni.dev"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+      "psr-4": {
+        "ActivityLogManagement\\": "src/"
+      }
+    }
+}​
