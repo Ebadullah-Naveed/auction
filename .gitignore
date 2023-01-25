@@ -3,6 +3,8 @@
 /public/images
 /public/hot
 /public/storage
+/public/profile_pictures
+/public/cnic
 /storage/*.key
 /vendor
 .env

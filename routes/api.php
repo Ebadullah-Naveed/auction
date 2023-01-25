@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\{AuthController,HomeController,ListingController,BidController};
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -23,4 +23,22 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('register', 'register');
     Route::post('refresh', 'refresh');
     Route::get('me', 'me');
+    Route::post('verifyOtp', 'verifyOtp');
+    Route::get('active/{user}', 'activeUser');
+});
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('home', [HomeController::class,'index']);
+
+    //Product listing routes
+    Route::group(['prefix'=>'product'], function () {
+        Route::get('/', [ListingController::class,'index']);
+        Route::get('/{product}', [ListingController::class,'getProductById']);
+    });
+
+    //Bid routes
+    Route::group(['prefix'=>'bid'], function () {
+        Route::get('/', [BidController::class,'index']);
+        Route::post('/place', [BidController::class,'bidProduct']);
+    });
 });

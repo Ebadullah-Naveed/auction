@@ -1,47 +1,109 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="{{asset('admin/assets/img/basic/favicon.ico')}}" type="image/x-icon">
+    <title>{{ config('app.name', 'Admin Panel').' - Login' }}</title>
+    <!-- CSS -->
+    {{-- <link rel="stylesheet" href="{{asset('admin/assets/css/app.css')}}"> --}}
+    <link rel="stylesheet" href="{{asset('admin/assets/css/app.min.css')}}">
+    <link rel="stylesheet" href="{{asset('admin/assets/css/style.css')}}">
+</head>
+<body class="light" onload="var loader = document.getElementById('loader');loader.style.display = 'none';">
+<!-- Pre loader -->
+<div id="loader" class="loader">
+    <div class="plane-container page_custom_loader">
+        <img src="{{asset('admin/assets/img/logo/logo_cyan.png')}}">
+        <div class="preloader-wrapper big active">
+            <div class="spinner-layer spinner-blue">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                <div class="circle"></div>
+            </div><div class="circle-clipper right">
+                <div class="circle"></div>
+            </div>
+            </div>
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
+            <div class="spinner-layer spinner-purple">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                <div class="circle"></div>
+            </div><div class="circle-clipper right">
+                <div class="circle"></div>
+            </div>
+            </div>
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            <div class="spinner-layer spinner-purple-blue">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                <div class="circle"></div>
+            </div><div class="circle-clipper right">
+                <div class="circle"></div>
+            </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div id="app">
+<main>
+    <div id="primary" class="p-t-b-100 height-full">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mx-md-auto paper-card z-1">
+                    <div class="text-center">
+                        <h3 class="mt-1">{{config('app.name', '')}} Sign In</h3>
+                        <p class="p-t-b-20x"></p>
+                    </div>
+
+                    <!-- Validation Errors -->
+                    <x-auth-validation-errors class="mb-4" :errors="$errors" />
+
+                    <form method="POST" action="{{ route('login') }}" id="loginForm" onsubmit="showLoader()">
+                        @csrf
+                        <div class="form-group has-icon"><i class="icon-envelope-o"></i>
+                            <input type="text" class="form-control form-control-lg"
+                                name="email"
+                                placeholder="Email Address"
+                                required
+                                autofocus
+                                >
+                        </div>
+                        <div class="form-group has-icon"><i class="icon-user-secret"></i>
+                            <input type="password" class="form-control form-control-lg"
+                                name="password"
+                                required autocomplete="current-password"
+                                placeholder="Password"
+                                required
+                                >
+                        </div>
+                        <input type="submit" class="btn btn-primary btn-lg btn-block login_btn" value="Log In">
+                        
+                    </form>
+                </div>
+            </div>
         </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+        <img src="{{asset('admin/assets/img/logo/logo_cyan.png')}}" class="bg-img-br z-0" alt="">
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
+    </div>
+    <!-- #primary -->
+</main>
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+</div>
+<!--/#app -->
+{{-- <script defer src="{{asset('admin/assets/js/app.js')}}"></script> --}}
+<script>
+    function showLoader(){
+        document.getElementById('loader').style = "display:block;";
+    }
+</script>
 
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-            </label>
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
-
-            <x-primary-button class="ml-3">
-                {{ __('Log in') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+</body>
+</html>

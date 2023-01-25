@@ -22,10 +22,10 @@ class DatabaseSeeder extends Seeder
         // ]);
 
 
-        // $this->call(ActivityTemplateSeeder::class);
-        // $this->call(SettingSeeder::class);
-        // $this->call(RoleSeeder::class);
-        // $this->call(PermissionSeeder::class);
+        $this->call(ActivityTemplateSeeder::class);
+        $this->call(SettingSeeder::class);
+        $this->call(RoleSeeder::class);
+        $this->call(PermissionSeeder::class);
 
         $this->call(UserSeeder::class);
         $this->call(RolePermissionSeeder::class);

@@ -13,6 +13,12 @@ class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    const LIST_PERMISSION = 'list-admin-user';
+    const VIEW_PERMISSION = 'view-admin-user';
+    const ADD_PERMISSION = 'add-admin-user';
+    const EDIT_PERMISSION = 'edit-admin-user';
+    const DELETE_PERMISSION = 'delete-admin-user';
+
     /**
      * The attributes that are mass assignable.
      *

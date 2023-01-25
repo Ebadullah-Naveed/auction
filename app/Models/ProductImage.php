@@ -9,7 +9,7 @@ class ProductImage extends Model
 {
     use HasFactory;
 
-    protected $table = 'category';
+    protected $table = 'product_image';
     protected $guarded = ['id'];
     public $timestamps = false;
 
