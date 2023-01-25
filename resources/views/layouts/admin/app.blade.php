@@ -83,7 +83,7 @@
                         <!-- User Account-->
                         <li class="dropdown custom-dropdown user user-menu ">
                             <a href="#" class="nav-link" data-toggle="dropdown" role="button" id="dropdownMenuLink" aria-haspopup="true" aria-expanded="false">
-                                <img src="{{ auth()->user()->avatar }}" class="user-image" alt="User Image">
+                                <img src="{{ auth()->user()->image }}" class="user-image" alt="User Image">
                                 {{ auth()->user()->name }}
                                 <i class="icon-more_vert "></i>
                             </a>
@@ -130,20 +130,7 @@
         Toast.fire({ title: "{{Session::get('title')}}", text: "{{Session::get('message')}}", type: "{{Session::get('type')}}" });
     @endif
 
-    const datatablesLoaderHtml = `<div class="plane-container datatable_custom_loader" >
-                                    <img src="{{asset('admin/assets/img/logo/logo_cyan.png')}}">
-                                    <div class="preloader-wrapper big active">
-                                        <div class="spinner-layer spinner-blue-only">
-                                            <div class="circle-clipper left">
-                                                <div class="circle"></div>
-                                            </div><div class="gap-patch">
-                                            <div class="circle"></div>
-                                        </div><div class="circle-clipper right">
-                                            <div class="circle"></div>
-                                        </div>
-                                        </div>
-                                    </div>
-                                </div>`;
+    const datatablesLoaderHtml = ``;
 
 </script>
 @stack('scripts')
