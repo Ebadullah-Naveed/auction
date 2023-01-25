@@ -165,9 +165,9 @@ class AuthController extends Controller
         ]);
     }
 
-    public function activeUser(User $user)
+    public function activeUser($user)
     {
-        $user->update(['status',1]);
+        User::where('id',$user)->update(['status',1]);
     }
 
 }
