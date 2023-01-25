@@ -162,7 +162,7 @@ myApp.listing = (function() {
             }
             
             $(listingTableId).DataTable({
-                language: { "processing": datatablesLoaderHtml },
+                // language: { "processing": datatablesLoaderHtml },
                 columnDefs: [ {
                     "targets"  : 'no-sort',
                     "orderable": false,

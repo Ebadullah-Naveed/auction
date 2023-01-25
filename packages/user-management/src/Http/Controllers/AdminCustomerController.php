@@ -82,17 +82,12 @@ class AdminCustomerController extends Controller
     }
 
     private function getModelCollection($request, $with=[]){
-        $with = array_merge([
-            'customer:id,user_id,is_kyc_completed',
-            // 'customer.account.user_roundup',
-            'customer.user_goal_config:user_goal_config.id,user_goal_config.account_id',
-            'user_document:user_documents.customer_id,user_documents.first_name,user_documents.last_name,user_documents.email'
-        ], $with);
+        $with = array_merge([], $with);
         $query = User::where('role_id',null);
                     // ->whereHas('user_document');
 
         if( ($request->status != null) && ($request->status != '') ){
-            $query->where('is_active',$request->status);
+            $query->where('status',$request->status);
         }
 
         if( ($request->is_phone_verified != null) && ($request->is_phone_verified != '') ){
@@ -109,15 +104,15 @@ class AdminCustomerController extends Controller
         return $query;
     }
 
-    public function show($id) {
-        $data['user'] = User::getByEid($id);
-        $data['title'] = 'Customer Details';
-        $data['action_url'] = route('admin.customers');
-        $data['update_status_url'] = route('admin.customer.update.status',['id'=>$data['user']->e_id]);
-        $accountId = $data['user']->account->id;
-        $data['transactions'] = Transaction::where('account_id',$accountId)->with(['user_goal_config:id,name'])->orderBy('id','DESC')->limit(10)->get();
-        return view($this->show_view, $data);
-    }
+    // public function show($id) {
+    //     $data['user'] = User::getByEid($id);
+    //     $data['title'] = 'Customer Details';
+    //     $data['action_url'] = route('admin.customers');
+    //     $data['update_status_url'] = route('admin.customer.update.status',['id'=>$data['user']->e_id]);
+    //     $accountId = $data['user']->account->id;
+    //     $data['transactions'] = Transaction::where('account_id',$accountId)->with(['user_goal_config:id,name'])->orderBy('id','DESC')->limit(10)->get();
+    //     return view($this->show_view, $data);
+    // }
 
     public function updateStatus(Request $request,$id){
 

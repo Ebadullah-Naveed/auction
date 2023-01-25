@@ -47,7 +47,7 @@ class UserFormRequest extends FormRequest
             'email' => ['required','email','unique:users,email,'.$id],
             'password' => ['nullable','min:6'],
             'phone_number' => ['required','max:20','min:10'],
-            'avatar' => ['nullable','image'],
+            'image' => ['nullable','image'],
             'role_id' => ['required'],
             'dob' => ['nullable','date'],
 
