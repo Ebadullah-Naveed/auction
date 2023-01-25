@@ -114,7 +114,7 @@ class AuthController extends Controller
 
             $this->sendEmail($user->email,new OtpMail($user->otp));
 
-            return $this->response(true,['otp'=>auth()->user()->otp],'User registered successfully',200);
+            return $this->response(true,['otp'=>$user->otp],'User registered successfully',200);
         }
         catch(\Exception $e)
         {
