@@ -24,6 +24,7 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('refresh', 'refresh');
     Route::get('me', 'me');
     Route::post('verifyOtp', 'verifyOtp');
+    Route::get('active/{user}', 'activeUser');
 });
 
 Route::group(['middleware' => 'auth'], function () {

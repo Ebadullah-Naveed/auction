@@ -18,7 +18,7 @@ class AuthController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login','register','verifyOtp']]);
+        $this->middleware('auth:api', ['except' => ['login','register','verifyOtp','activeUser']]);
     }
 
     public function login(Request $request)
@@ -110,11 +110,7 @@ class AuthController extends Controller
                 return $this->response(false,null,'User registration failed',300);
             }
 
-            $user->update(['otp'=>"0000"]);
-
-            $this->sendEmail($user->email,new OtpMail($user->otp));
-
-            return $this->response(true,['otp'=>$user->otp],'User registered successfully',200);
+            return $this->response(true,['otp'=>$user->otp],'Your account is under review.',200);
         }
         catch(\Exception $e)
         {
@@ -167,6 +163,11 @@ class AuthController extends Controller
                 'type' => 'bearer',
             ]
         ]);
+    }
+
+    public function activeUser(User $user)
+    {
+        $user->update(['status',1]);
     }
 
 }
