@@ -7,12 +7,24 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-// use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
+use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
+use Carbon\Carbon;
 
 class User extends Authenticatable 
-// implements JWTSubject
+implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
+
+    //Constant
+    const DEFAULT_AVATAR  = 'profile_pictures/avatar.png';
+    const STATUS_ACTIVE  = 1;
+    const STATUS_INACTIVE  = 0;
+
+    const IS_PHONE_VERIFIED_YES  = 1;
+    const IS_PHONE_VERIFIED_NO  = 0;
+
+    const IS_EMAIL_VERIFIED_YES  = 1;
+    const IS_EMAIL_VERIFIED_NO  = 0;
 
     const LIST_PERMISSION = 'list-admin-user';
     const VIEW_PERMISSION = 'view-admin-user';
@@ -28,6 +40,8 @@ class User extends Authenticatable
     protected $guarded = [
        'id'
     ];
+
+    protected $appends = ['e_id','m_created_at','m_date_joined'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -48,15 +62,15 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    // public function getJWTIdentifier()
-    // {
-    //     return $this->getKey();
-    // }
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
 
-    // public function getJWTCustomClaims()
-    // {
-    //     return [];
-    // }
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
 
     // Relationships
     public function role(){
@@ -65,6 +79,108 @@ class User extends Authenticatable
 
     public function products(){
         return $this->hasMany('App\Models\Product','user_id');
+    }
+
+    //Mutators and Accessors
+    public function getImageAttribute() {
+        return asset(self::DEFAULT_AVATAR);
+    }
+
+    public function getEidAttribute(){
+        return encrypt($this->id);
+    }
+    
+    public function getLastLoginAttribute($value) {
+        if($value){
+            return Carbon::parse($value)
+            ->isoFormat('DD MMM YYYY, h:mm a');
+        }
+        return '-';
+    }
+
+    public function getMDateJoinedAttribute() {
+        return Carbon::parse($this->date_joined)
+        ->isoFormat('DD MMM YYYY, h:mm a');
+    }
+
+    public function getMCreatedAtAttribute(){
+        return Carbon::parse($this->date_joined??$this->created_at)->isoFormat('DD MMM YYYY');
+    }
+
+    static public function canOpenList() {
+        return ( auth()->user()->can(self::LIST_PERMISSION) );
+    }
+
+    static public function canAdd(){
+        return ( auth()->user()->can(self::ADD_PERMISSION) );
+    }
+
+    static public function canEdit(){
+        return ( auth()->user()->can(self::EDIT_PERMISSION) );
+    }
+
+    static public function canView(){
+        return ( auth()->user()->can(self::VIEW_PERMISSION) );
+    }
+
+    public function getEditBtnHtml(){
+        if( self::canEdit() ){
+            $link = route('admin.users.edit',[ 'id' => $this->e_id ]);
+            return '<a href="'.$link.'" class="btn btn-primary btn-sm" title="Edit"><i class="icon icon-edit pr-0"></i> </a>';
+        }
+    }
+
+    public function getViewBtnHtml() {
+        if( self::canView() ){
+            $link = route('admin.users.show', [ 'id' => $this->e_id ] );
+            return '<a href="'.$link.'" class="btn btn-primary btn-sm" title="View Details"><i class="icon icon-eye pr-0"></i> </a>';
+        }
+        return '';
+    }
+
+    public function getStatusHtml(){
+        if($this->status == self::STATUS_ACTIVE){
+            // return '<label class="badge badge-success">Active</label>';
+            return '<span class="icon icon-unlock f-16 mr-1 text-success" title="Active"></span>';
+        } else{
+            return '<span class="icon icon-lock f-16 mr-1 text-danger" title="InActive"></span>';
+            // return '<label class="badge badge-danger">Inactive</label>';
+        }
+    }
+
+    public function getIsPhoneVerifiedHtml(){
+        if($this->is_phone_verified == self::IS_PHONE_VERIFIED_YES){
+            // return '<label class="badge badge-success" title="'.$this->m_phone_verified_at.'">Verified</label>';
+            return '<span class="icon icon-check f-16 mr-1 text-success" title="Verified at"></span>';
+        } else{
+            // return '<label class="badge badge-danger">Not Verified</label>'
+            return '<span class="icon icon-remove f-16 mr-1 text-danger" title="Not Verified"></span>';
+        }
+    }
+
+    public function getIsEmailVerifiedHtml(){
+        if($this->is_email_verified == self::IS_EMAIL_VERIFIED_YES){
+            // return '<label class="badge badge-success" title="'.$this->m_email_verified_at.'">Verified</label>';
+            return '<span class="icon icon-check f-16 mr-1 text-success" title="Verified"></span>';
+        } else{
+            // return '<label class="badge badge-danger">Not Verified</label>';
+            return '<span class="icon icon-remove f-16 mr-1 text-danger" title="Not Verified"></span>';
+        }
+    }
+
+    public function updateLastLogin($ip){
+        $this->last_login_ip = $ip;
+        $this->last_login = now();
+        $this->save();
+
+        //Logging last login
+        Helper::createActivityLog( Helper::LOG_USER_LOGIN, [ 'ip' => $ip ] );
+    }
+
+    //Static Functions
+    static public function getByEid($id){
+        $id = decrypt($id);
+        return self::findOrFail($id);
     }
 
 }

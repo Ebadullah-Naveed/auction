@@ -42,6 +42,16 @@ class PermissionSeeder extends Seeder
             ['id'=>16,'name'=>"edit-customer",'slug'=>"edit-customer"],
             ['id'=>17,'name'=>"delete-customer",'slug'=>"delete-customer"],
 
+            //Activity Logs
+            ['id'=>18,'name'=>"list-activity-logs",'slug'=>"list-activity-logs"],
+
+            //Category
+            ['id'=>19,'name'=>"list-category",'slug'=>"list-category"],
+            ['id'=>20,'name'=>"view-category",'slug'=>"view-category"],
+            ['id'=>21,'name'=>"add-category",'slug'=>"add-category"],
+            ['id'=>22,'name'=>"edit-category",'slug'=>"edit-category"],
+            ['id'=>23,'name'=>"delete-category",'slug'=>"delete-category"],
+
         ]);
     }
 }

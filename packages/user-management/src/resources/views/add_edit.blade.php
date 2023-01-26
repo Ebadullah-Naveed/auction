@@ -37,6 +37,14 @@
                 </div>
 
                 <div class="form-group col-12 mb-3">
+                    <label for="username" class="w-100 text-left">Username <span class="text-danger">*</span> </label>
+                    <input type="text" class="form-control" name="username" placeholder="Username" value="{{$user?$user->username:old('username')}}" required>
+                    @error('username')
+                        <div class="invalid-feedback"> {{$message}} </div>
+                    @enderror
+                </div>
+
+                <div class="form-group col-12 mb-3">
                     <label for="password" class="col-form-label s-12">Password @if(!$user) <span class="text-danger">*</span> @endif </label>
                     <div class="d-flex align-items-baseline">
                         <div class="w-100">
@@ -50,14 +58,6 @@
                         @if( $user )
                             <label>Leave blank if you don't want to change password</label>
                         @endif
-                    @enderror
-                </div>
-
-                <div class="form-group col-12 mb-3">
-                    <label for="dob" class="w-100 text-left">DOB</label>
-                    <input type="date" class="form-control" name="dob" placeholder="Date of birth" value="{{$user?$user->dob:old('dob')}}">
-                    @error('dob')
-                        <div class="invalid-feedback"> {{$message}} </div>
                     @enderror
                 </div>
 
@@ -86,7 +86,7 @@
                     <div class="d-flex justify-content-left align-items-center">
                         <label for="status" class="col-form-label s-12 mr-4">Status</label>
                         <div class="material-switch">
-                            <input id="statusOption" name="status" type="checkbox"  {{($user && ($user->is_active==1))?'checked':''}} >
+                            <input id="statusOption" name="status" type="checkbox"  {{($user && ($user->status==App\Models\User::STATUS_ACTIVE))?'checked':''}} >
                             <label for="statusOption" class="bg-success"></label>
                         </div>
                     </div>

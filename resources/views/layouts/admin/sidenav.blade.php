@@ -7,9 +7,8 @@ if( isset($page) ){
 <section class="sidebar">
     <div class="xw-80px mt-3 mb-3 xml-3 text-center">
         <a href="{{route('home')}}">
-            {{-- <img src="{{asset('admin/assets/img/logo/logo_orange.png')}}" alt="Trikl" height="48"> --}}
-            <img src="{{asset('admin/assets/img/logo/logo_cyan.png')}}" alt="Trikl" style="height:48px;">
-            {{-- <h2 class="text-upper">Trikl</h2> --}}
+            {{-- <img src="{{asset('admin/assets/img/logo/logo_cyan.png')}}" alt="Auction" style="height:48px;"> --}}
+            <h2 class="text-upper">Auction</h2>
         </a>
     </div>
     <ul class="sidebar-menu hover-dark">
@@ -20,6 +19,15 @@ if( isset($page) ){
                 <span>Dashboard</span>
             </a>
         </li>
+
+        @can(App\Models\Category::LIST_PERMISSION)
+        <li class="@if( $pageName == 'category_management' ) nav-active @endif">
+            <a href="{{route('admin.category')}}">
+                <i class="icon icon-users s-18"></i> 
+                <span>Category Management</span> 
+            </a>
+        </li>
+        @endif
 
         @can(App\Models\User::LIST_PERMISSION)
         <li class="@if( $pageName == 'user_management' ) nav-active @endif">
@@ -33,7 +41,7 @@ if( isset($page) ){
         @if( Gate::any([
             App\Models\Activity\ActivityLog::LIST_PERMISSION,
         ]) )
-        <li class="treeview @if( in_array($pageName,['parser_log','activity_log','request_log','transaction_log','third_party_log']) ) active @endif ">
+        <li class="treeview @if( in_array($pageName,['activity_log']) ) active @endif ">
             <a href="#">
                 <i class="icon icon-clipboard-text2 light-green-text s-18"></i>
                 Logs
@@ -57,7 +65,7 @@ if( isset($page) ){
             App\Models\Role::LIST_PERMISSION,
             App\Models\Setting::LIST_PERMISSION,
         ]) )
-        <li class="treeview @if( in_array($pageName,['role','setting','roundup_factor','cronjob']) ) active @endif ">
+        <li class="treeview @if( in_array($pageName,['role','setting']) ) active @endif ">
             <a href="#">
                 <i class="icon icon-gear light-green-text s-18"></i>
                 Configurations

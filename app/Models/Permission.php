@@ -78,6 +78,16 @@ class Permission extends BaseModel
                 'delete-customer'
             ],
         ],
+        'category-managment' => [
+            'name' => 'Category Management',
+            'permissions' => [
+                'list-category',
+                'view-category',
+                'add-category',
+                'edit-category',
+                'delete-category'
+            ],
+        ],
         
     ];
 

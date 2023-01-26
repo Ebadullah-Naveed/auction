@@ -15,8 +15,7 @@
 <body class="light" onload="var loader = document.getElementById('loader');loader.style.display = 'none';">
 <!-- Pre loader -->
 <div id="loader" class="loader">
-    <div class="plane-container page_custom_loader">
-        <img src="{{asset('admin/assets/img/logo/logo_cyan.png')}}">
+    <div class="plane-container">
         <div class="preloader-wrapper big active">
             <div class="spinner-layer spinner-blue">
                 <div class="circle-clipper left">

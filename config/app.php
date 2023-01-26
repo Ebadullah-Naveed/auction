@@ -185,6 +185,10 @@ return [
         /*
          * Package Service Providers...
          */
+        SettingManagement\SettingManagementServiceProvider::class,
+        RoleManagement\RoleManagementServiceProvider::class,
+        UserManagement\UserManagementServiceProvider::class,
+        ActivityLogManagement\ActivityLogManagementServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -210,6 +214,9 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
+
+        'Helper' => App\Http\Common\Helper::class,
+
     ])->toArray(),
 
 ];

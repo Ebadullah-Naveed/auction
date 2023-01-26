@@ -20,8 +20,7 @@
 <body class="light">
 <!-- Pre loader -->
 <div id="loader" class="loader">
-    <div class="plane-container page_custom_loader">
-        <img src="{{asset('admin/assets/img/logo/logo_cyan.png')}}">
+    <div class="plane-container">
         <div class="preloader-wrapper big active">
             <div class="spinner-layer spinner-blue">
                 <div class="circle-clipper left">
@@ -32,7 +31,6 @@
                 <div class="circle"></div>
             </div>
             </div>
-
             <div class="spinner-layer spinner-purple">
                 <div class="circle-clipper left">
                     <div class="circle"></div>
@@ -42,7 +40,6 @@
                 <div class="circle"></div>
             </div>
             </div>
-
             <div class="spinner-layer spinner-purple-blue">
                 <div class="circle-clipper left">
                     <div class="circle"></div>
@@ -52,12 +49,11 @@
                 <div class="circle"></div>
             </div>
             </div>
-
         </div>
     </div>
 </div>
 <div id="app">
-    <aside class="main-sidebar fixed offcanvas shadow bg-primary text-white no-b bg-dark-blue">
+    <aside class="main-sidebar fixed offcanvas shadow bg-primary text-white no-b ">
         @include('layouts.admin.sidenav')
     </aside>
     <!--Sidebar End-->

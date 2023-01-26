@@ -21,6 +21,9 @@
             <dt>Email</dt>
             <dd>{{$user->email}}</dd>
 
+            <dt>Username</dt>
+            <dd>{{$user->username}}</dd>
+
             <dt>Phone Number</dt>
             <dd>{{$user->phone_number}}</dd>
 
@@ -29,22 +32,6 @@
 
             <dt>Date Joined</dt>
             <dd>{{$user->m_created_at}}</dd>
-
-            <dt>Date of Birth</dt>
-            <dd>{{$user->dob??'-'}}</dd>
-
-            @if( $user->role_id == App\Models\Role::CUSTOMER )
-
-            <dt>Father Name</dt>
-            <dd>{{$user->customer->father_name??'-'}}</dd>
-
-            <dt>CNIC</dt>
-            <dd>{{$user->customer->cnic??'-'}}</dd>
-
-            <dt>Address</dt>
-            <dd>{{$user->customer->house_number??'-'}} {{$user->customer->street_address??'-'}}</dd>
-
-            @endif
 
             <dt>Status</dt>
             <dd>{!! $user->getStatusHtml() !!}</dd>

@@ -1,6 +1,6 @@
 :root {
     --theme-color-blue: #2cc3fa;
-    --theme-color-dark-blue: #15003d;
+    --theme-color-dark: #fff;
 
     --theme-color-blue-trans: #2cc3fa80;
 
@@ -20,7 +20,7 @@
 }
 
 .login_btn {
-    background: linear-gradient(135deg,#7a74f7 0,#2cc3fa 100%);
+    
 }
 
 .page_custom_loader img {
@@ -43,24 +43,22 @@
 }
 
 .bg-dark-blue {
-    background-color: var(--theme-color-dark-blue) !important;
+    background-color: var(--theme-color-dark) !important;
 }
 
 .bg-blue {
-    background-color: var(--theme-color-blue) !important;
+    /* background-color: var(--theme-color-blue) !important; */
 }
 
-.btn-primary {
+/* .btn-primary {
     background-color: var(--theme-color-blue) !important;
-    /* background: linear-gradient(135deg,#7a74f7 0,#2cc3fa 100%) !important; */
 }
 .btn-primary:focus {
     border-color: var(--theme-color-blue) !important;
-    /* background: linear-gradient(135deg,#7a74f7 0,#2cc3fa 100%) !important; */
 }
 .btn-primary:active {
     box-shadow: 0 0 0 0.2rem var(--theme-color-blue-trans) !important;
-}
+} */
 
 .btn-success {
     background-color: var(--theme-color-success) !important;
@@ -82,35 +80,15 @@
     box-shadow: 0 0 0 0.2rem var(--theme-color-danger-trans) !important;
 }
 
-/* .badge-success-custom {
-    background-color: #7dc37f;
-    color: #fff;
-}
-
-.badge-primary-custom {
-    background-color: var(--theme-color-blue);
-    color: #fff;
-}
-
-.badge-warning-custom {
-    background-color: #ffd858;
-    color: #fff;
-}
-
-.badge-danger-custom {
-    background: #f87268;
-    color: #fff;
-} */
-
 .badge-success {
     background-color: var(--theme-color-success);
     color: #fff;
 }
 
-.badge-primary {
+/* .badge-primary {
     background-color: var(--theme-color-blue);
     color: #fff;
-}
+} */
 
 .badge-warning {
     background-color: var(--theme-color-warning);
@@ -374,8 +352,8 @@ div.dataTables_wrapper div.dataTables_processing{
 .goal_draft_highlight {
     background: #6c757d42;
 }
-.nav-active {
-    background: var(--theme-color-blue) !important;
+.nav-active  {
+    background-color: rgba(0,0,0,.1);
 }
 .nav-active a span {
     color: #ffffff !important;

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('email',100)->unique();
             $table->string('username',50)->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('mobile_number',20)->unique();
+            $table->string('phone_number',20)->unique();
 
             $table->string('cnic',20)->unique()->nullable();
             $table->string('cnic_front_image')->nullable();

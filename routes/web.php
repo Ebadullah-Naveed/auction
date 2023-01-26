@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminHomeController;
+use App\Http\Controllers\Admin\AdminProfileController;
+use App\Http\Controllers\Admin\AdminCategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,9 +35,18 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('dashboard', [AdminHomeController::class, 'index'])->name('home');
 
     //Password reset
-    // Route::get('password-reset', [AdminProfileController::class, 'passwordReset'])->name('admin.profile.password_reset');
-    // Route::post('password-reset/update_password/{id}', [AdminProfileController::class, 'updatePassword'])->name('admin.profile.update_password');
+    Route::get('password-reset', [AdminProfileController::class, 'passwordReset'])->name('admin.profile.password_reset');
+    Route::post('password-reset/update_password/{id}', [AdminProfileController::class, 'updatePassword'])->name('admin.profile.update_password');
 
+    //Category Management
+    Route::get('categories', [AdminCategoryController::class, 'index'])->name('admin.category');
+    Route::post('category/fetch', [AdminCategoryController::class, 'fetch'])->name('admin.category.fetch');
+    Route::get('category/create', [AdminCategoryController::class, 'create'])->name('admin.category.create');
+    Route::post('category/store', [AdminCategoryController::class, 'store'])->name('admin.category.store');
+    Route::get('category/edit/{id}', [AdminCategoryController::class, 'edit'])->name('admin.category.edit');
+    Route::post('category/update/{id}', [AdminCategoryController::class, 'update'])->name('admin.category.update');
+    Route::get('category/delete/{id}', [AdminCategoryController::class, 'destroy'])->name('admin.category.destroy');
+    Route::get('category/show/{id}', [AdminCategoryController::class, 'show'])->name('admin.category.show');
 
 });
 
