@@ -33,6 +33,7 @@ Route::group(['middleware' => 'auth'], function () {
     //Product listing routes
     Route::group(['prefix'=>'product'], function () {
         Route::get('/', [ListingController::class,'index']);
+        Route::get('/make',[ListingController::class,'makeList']);
         Route::get('/{product}', [ListingController::class,'getProductById']);
     });
 
