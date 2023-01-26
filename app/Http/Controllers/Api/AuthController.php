@@ -96,7 +96,7 @@ class AuthController extends Controller
                 'role_id' => $role_id,
                 'password' => $password,
                 'username' => $request->username,
-                'phone_number' => $request->mobile_number,
+                'phone_number' => $request->phone_number,
                 'cnic' => $request->cnic,
                 'cnic_front_image' => $cnic_front_image,
                 'cnic_back_image' => $cnic_back_image,
