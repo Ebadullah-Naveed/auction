@@ -15,7 +15,7 @@ class Controller extends BaseController
     {
         return response()->json([
             'success' => $success,
-            'data' => is_array($data) ? $data : [$data],
+            'data' => $data,
             'message' => $message,
         ], $statusCode);
     }
