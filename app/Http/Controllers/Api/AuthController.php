@@ -72,6 +72,9 @@ class AuthController extends Controller
                 'language' => 'required',
                 'fcm_token' => 'sometimes',
                 'cnic' => 'required|unique:users',
+                'cnic_front_image' => 'required|image|mimes:jpg,png,jpeg|max:2048',
+                'cnic_back_image' => 'required|image|mimes:jpg,png,jpeg|max:2048',
+                'image' => 'sometimes|image|mimes:jpg,png,jpeg|max:2048',
             ]);
             if($validator->fails()){
                 return $this->response(false,null,$validator->messages()->all(),300);
