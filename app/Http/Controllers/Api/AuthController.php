@@ -70,8 +70,8 @@ class AuthController extends Controller
                 'password' => 'required|string|confirmed|min:6',
                 'mobile_number' => 'required|string|max:100|unique:users',
                 'language' => 'required',
-                'cnic' => 'required',
                 'fcm_token' => 'sometimes',
+                'cnic' => 'required|unique:users',
             ]);
             if($validator->fails()){
                 return $this->response(false,null,$validator->messages()->all(),300);
