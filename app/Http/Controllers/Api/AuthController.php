@@ -68,10 +68,13 @@ class AuthController extends Controller
                 'email' => 'required|string|email|max:100|unique:users',
                 'username' => 'required|string|max:100|unique:users',
                 'password' => 'required|string|confirmed|min:6',
-                'mobile_number' => 'required|string|max:100|unique:users',
+                'phone_number' => 'required|string|max:100|unique:users',
                 'language' => 'required',
                 'fcm_token' => 'sometimes',
                 'cnic' => 'required|unique:users',
+                'cnic_front_image' => 'required|image|mimes:jpg,png,jpeg|max:2048',
+                'cnic_back_image' => 'required|image|mimes:jpg,png,jpeg|max:2048',
+                'image' => 'sometimes|image|mimes:jpg,png,jpeg|max:2048',
             ]);
             if($validator->fails()){
                 return $this->response(false,null,$validator->messages()->all(),300);
@@ -96,7 +99,7 @@ class AuthController extends Controller
                 'role_id' => $role_id,
                 'password' => $password,
                 'username' => $request->username,
-                'mobile_number' => $request->mobile_number,
+                'phone_number' => $request->phone_number,
                 'cnic' => $request->cnic,
                 'cnic_front_image' => $cnic_front_image,
                 'cnic_back_image' => $cnic_back_image,

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\{Category,Product};
+use App\Models\{Category,Product,ProductAttribute};
 
 class ListingController extends Controller
 {
@@ -56,5 +56,15 @@ class ListingController extends Controller
     {   
         $product->load('images','attributes');
         return $this->response(true,$product,'Product fetched successfully',200);
+    }
+
+    public function makeList(){
+        $arr = [];
+        $att = ProductAttribute::where(['key'=>'make'])->get();
+        foreach($att as $make)
+        {
+            $arr[] = $make->value;
+        }
+        return $this->response(true,$arr,'Car Make Fetched successfully',200);
     }
 }
