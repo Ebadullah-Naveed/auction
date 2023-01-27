@@ -32,7 +32,7 @@ class Category extends BaseModel
     }
 
     public function getMCreatedAtAttribute(){
-        return Carbon::parse($this->date_joined??$this->created_at)->isoFormat('DD MMM YYYY');
+        return Carbon::parse($this->created_at)->isoFormat('DD MMM YYYY');
     }
 
     public function getMAttributeJsonAttribute(){
@@ -78,6 +78,10 @@ class Category extends BaseModel
         } else{
             return '<label class="badge badge-danger">No</label>';
         }
+    }
+
+    static public function getActive(){
+        return self::where('status',self::STATUS_ACTIVE)->get();
     }
 
 }

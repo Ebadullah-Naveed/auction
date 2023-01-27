@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminHomeController;
 use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\Admin\AdminCategoryController;
+use App\Http\Controllers\Admin\AdminProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,6 +48,16 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::post('category/update/{id}', [AdminCategoryController::class, 'update'])->name('admin.category.update');
     Route::get('category/delete/{id}', [AdminCategoryController::class, 'destroy'])->name('admin.category.destroy');
     Route::get('category/show/{id}', [AdminCategoryController::class, 'show'])->name('admin.category.show');
+
+    //Product Management
+    Route::get('products', [AdminProductController::class, 'index'])->name('admin.products');
+    Route::post('product/fetch', [AdminProductController::class, 'fetch'])->name('admin.product.fetch');
+    Route::get('product/create/{category_id}', [AdminProductController::class, 'create'])->name('admin.product.create');
+    Route::post('product/store', [AdminProductController::class, 'store'])->name('admin.product.store');
+    Route::get('product/edit/{id}', [AdminProductController::class, 'edit'])->name('admin.product.edit');
+    Route::post('product/update/{id}', [AdminProductController::class, 'update'])->name('admin.product.update');
+    Route::get('product/delete/{id}', [AdminProductController::class, 'destroy'])->name('admin.product.destroy');
+    Route::get('product/show/{id}', [AdminProductController::class, 'show'])->name('admin.product.show');
 
 });
 

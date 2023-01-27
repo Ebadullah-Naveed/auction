@@ -70,8 +70,9 @@ class CategoryFormRequest extends FormRequest
         if( isset( $data['custom_field']['key'] ) && ( count($data['custom_field']['key']) > 0 ) ){
             foreach( $data['custom_field']['key'] as $key=>$value ){
                 $attributes[] = [
-                    'key' => $value,
+                    'key' => strtolower($value),
                     'label' => $data['custom_field']['label'][$key],
+                    'required' => $data['custom_field']['required'][$key],
                     'type' => $data['custom_field']['type'][$key],
                 ];
             }

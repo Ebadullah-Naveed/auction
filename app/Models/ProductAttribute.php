@@ -11,5 +11,6 @@ class ProductAttribute extends Model
 
     protected $table = 'product_attribute';
     protected $guarded = ['id'];
+    public $timestamps = false;
 
 }

@@ -29,6 +29,15 @@ if( isset($page) ){
         </li>
         @endif
 
+        @can(App\Models\Product::LIST_PERMISSION)
+        <li class="@if( $pageName == 'product_management' ) nav-active @endif">
+            <a href="{{route('admin.products')}}">
+                <i class="icon icon-users s-18"></i> 
+                <span>Product Management</span> 
+            </a>
+        </li>
+        @endif
+
         @can(App\Models\User::LIST_PERMISSION)
         <li class="@if( $pageName == 'user_management' ) nav-active @endif">
             <a href="{{route('admin.users')}}">

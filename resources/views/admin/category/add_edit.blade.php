@@ -16,7 +16,7 @@
         <form action="{{$action_url}}" method="POST" class="needs-validation @if($errors->any()) was-validated @endif" novalidate>
             @csrf
 
-            <input type="hidden" name="{{$user?'updated_by_id':'created_by_id'}}" value="{{auth()->user()->id}}">
+            {{-- <input type="hidden" name="{{$user?'updated_by_id':'created_by_id'}}" value="{{auth()->user()->id}}"> --}}
 
             <div class="form-row">
                 <input type="hidden" name="user_id" value="{{$user?$user->id:''}}" >
@@ -62,6 +62,13 @@
                             <div class="col mb-3 pl-2">
                                 <label for="message" class="w-100 text-left">Label <span class="text-danger">*</span> </label>
                                 <input type="text" class="form-control" name="custom_field[label][]" value="{{$item->label}}" required>
+                            </div>
+                            <div class="col mb-3 pl-2">
+                                <label for="message" class="w-100 text-left">Required <span class="text-danger">*</span> </label>
+                                <select class="form-control" name="custom_field[required][]" required>
+                                    <option value="1" {{$item->required==1?'selected':''}} >Yes</option>
+                                    <option value="0" {{$item->required==0?'selected':''}}>No</option>
+                                </select>
                             </div>
                             <div class="col mb-3 pl-2">
                                 <label for="message" class="w-100 text-left">Type <span class="text-danger">*</span> </label>
@@ -131,6 +138,13 @@ $(document).ready(function() {
                         <div class="col mb-3 pl-2">
                             <label for="message" class="w-100 text-left">Label <span class="text-danger">*</span> </label>
                             <input type="text" class="form-control" name="custom_field[label][]" required>
+                        </div>
+                        <div class="col mb-3 pl-2">
+                            <label for="message" class="w-100 text-left">Required <span class="text-danger">*</span> </label>
+                            <select class="form-control" name="custom_field[required][]" required>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
                         </div>
                         <div class="col mb-3 pl-2">
                             <label for="message" class="w-100 text-left">Type <span class="text-danger">*</span> </label>

@@ -88,6 +88,16 @@ class Permission extends BaseModel
                 'delete-category'
             ],
         ],
+        'product-managment' => [
+            'name' => 'Product Management',
+            'permissions' => [
+                'list-product',
+                'view-product',
+                'add-product',
+                'edit-product',
+                'delete-product'
+            ],
+        ],
         
     ];
 
