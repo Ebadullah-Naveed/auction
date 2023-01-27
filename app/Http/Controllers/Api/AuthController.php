@@ -36,7 +36,7 @@ class AuthController extends Controller
 
             $credentials = $request->only('email', 'password');
 
-            $token = Auth::attempt($credentials);
+            $token = JWTAuth::attempt($credentials);
             if (!$token) {
                 return $this->response(false,null,'Unauthorized',300);
             }
@@ -131,22 +131,19 @@ class AuthController extends Controller
         if ($validator->fails()) {
             return $this->response(false,null,$validator->messages()->all(),300);
         }
-
-        if(User::where('email',$request->email)->value('otp') != $request->otp)
+        $user = User::where('email',$request->email)->first();
+        if($user->otp != $request->otp)
         {
             return $this->response(false,null,"Incorrect OTP",422);
         }
 
-        $token = ($user = Auth::getProvider()->retrieveByCredentials($request->only(['email'])))
-        ? Auth::login($user)
-        : false;
-
-        if($token == false)
+        $token = JWTAuth::fromUser($user);
+        JWTAuth::setToken($token)->toUser();
+        if(!$token)
         {
             return $this->response(false,null,"Failed",422);
         }
-        
-        $user->update(['otp'=>null,'is_email_verified' => 1,'last_login'=>date('Y-m-d h:i:s'),'last_login_ip'=>$this->get_client_ip()]);
+        auth()->user()->update(['otp'=>null,'is_email_verified' => 1,'last_login'=>date('Y-m-d h:i:s'),'last_login_ip'=>$this->get_client_ip()]);
 
         return $this->response(true,['token' => $token],'OTP verified successfully',200);
     }
