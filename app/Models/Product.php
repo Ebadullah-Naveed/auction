@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Product extends Model
 {
@@ -22,6 +23,10 @@ class Product extends Model
     const ADD_PERMISSION = 'add-product';
     const EDIT_PERMISSION = 'edit-product';
     const DELETE_PERMISSION = 'delete-product';
+
+    public function getEidAttribute(){
+        return encrypt($this->id);
+    }
 
     public function images(){
         return $this->hasMany('App\Models\ProductImage','product_id');
