@@ -27,7 +27,7 @@ Route::controller(AuthController::class)->group(function () {
     Route::get('active/{user}', 'activeUser');
 });
 
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => 'auth:api'], function () {
     Route::get('home', [HomeController::class,'index']);
 
     //Product listing routes
