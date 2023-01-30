@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="{{asset('admin/assets/img/basic/favicon.ico')}}" type="image/x-icon">
+    <link rel="icon" href="{{asset('favicon.ico')}}" type="image/x-icon">
     {{-- <link rel="icon" href="{{asset('admin/assets/img/basic/favicon.png')}}" type="image/x-icon"> --}}
     <title>{{ config('app.name', 'Admin Panel') }}</title>
     <!-- CSS -->

@@ -12,7 +12,7 @@ class Product extends Model
 
     protected $table = 'products';
     protected $guarded = ['id'];
-    protected $appends = ['e_id','m_price','m_min_increment','m_max_increment','m_created_at','bid'];
+    protected $appends = ['e_id','m_price','m_min_increment','m_max_increment','m_created_at','m_end_datetime','bid','can_bid'];
 
     const STATUS_PENDING = 0;
     const STATUS_ACTIVE = 1;
@@ -24,12 +24,20 @@ class Product extends Model
     const EDIT_PERMISSION = 'edit-product';
     const DELETE_PERMISSION = 'delete-product';
 
-    public function getEidAttribute(){
+    static public function getByEid($id){
+        return self::find( decrypt($id) );
+    } 
+
+    public function getEIdAttribute(){
         return encrypt($this->id);
     }
 
     public function images(){
         return $this->hasMany('App\Models\ProductImage','product_id');
+    }
+
+    public function images_by_sequence(){
+        return $this->hasMany('App\Models\ProductImage','product_id')->orderBy('sequence','ASC');
     }
     
     public function category(){
@@ -61,7 +69,23 @@ class Product extends Model
     }
 
     public function getMCreatedAtAttribute(){
-        return Carbon::parse($this->created_at)->isoFormat('DD MMM YYYY');
+        return Carbon::parse($this->created_at)->isoFormat('DD MMM, YYYY (h:mm a)');
+    }
+
+    public function getMEndDatetimeAttribute(){
+        return Carbon::parse($this->end_datetime)->isoFormat('DD MMM, YYYY (h:mm a)');
+    }
+
+    public function getCanBidAttribute(){
+        $dateToday = Carbon::now();
+        $endDatetime = Carbon::parse($this->end_datetime);
+        if( ($endDatetime->lessThanOrEqualTo($dateToday)) 
+            || ($this->status != self::STATUS_ACTIVE) 
+        ){
+            return 0;
+        } else {
+            return 1;
+        }
     }
 
     public function getBidAttribute($value){
@@ -91,7 +115,7 @@ class Product extends Model
 
     public function getEditBtnHtml(){
         if( self::canEdit() ){
-            $link = route('admin.category.edit',[ 'id' => $this->e_id ]);
+            $link = route('admin.product.edit',[ 'id' => $this->e_id ]);
             return '<a href="'.$link.'" class="btn btn-primary btn-sm" title="Edit"><i class="icon icon-edit pr-0"></i> </a>';
         }
     }
@@ -104,6 +128,22 @@ class Product extends Model
         } else {
             return '<label class="badge badge-warning">Pending</label>';
         }
+    }
+
+    public function getCanBidStatusHtml(){
+        if($this->can_bid == true){
+            return '<label class="badge badge-success">Yes</label>';
+        } else {
+            return '<label class="badge badge-danger">No</label>';
+        }
+    }
+
+    public function getLastBidHtml(){
+        $latestBid = ProductBid::where('product_id',$this->id)->orderBy('created_at','DESC')->first();
+        if( $latestBid ){
+            return $latestBid->m_amount.'<br>'.$latestBid->m_created_at;
+        }
+        return '-';
     }
 
 }

@@ -48,7 +48,13 @@ class AdminProductController extends Controller
         ->addColumn('status_html', function($row){
             return $row->getStatusHtml();
         })
-        ->rawColumns(['edit_btn','view_btn','status_html'])
+        ->addColumn('can_bid_html', function($row){
+            return $row->getCanBidStatusHtml();
+        })
+        ->addColumn('last_bid_html', function($row){
+            return $row->getLastBidHtml();
+        })
+        ->rawColumns(['edit_btn','view_btn','status_html','can_bid_html','last_bid_html'])
         ->make(true);
     }
 
@@ -60,7 +66,7 @@ class AdminProductController extends Controller
             $query->where('status',$request->status);
         }
 
-        $query = $query->with($with);
+        $query = $query->with($with)->withCount('bids');
 
         return $query;
     }
@@ -117,9 +123,19 @@ class AdminProductController extends Controller
                         'label' => $attrLabel[$attrKey],
                     ]);
                 }
-                // dd($attrKeys);
+
+                if( $request->hasFile('image') ){
+                    $path = $request->file('image')->store('products', 'public');
+                    $storage_path = $path;
+                    // $data['image'] = $storage_path; 
+                    ProductImage::create([
+                        'product_id' => $product->id,
+                        'type' => ProductImage::TYPE_IMAGE,
+                        'source' => $storage_path,
+                    ]);
+                }
+
             }
-            // dd($product);
             
             Helper::successToast('Product has been added successfully');
             return redirect()->route('admin.products');
@@ -142,9 +158,41 @@ class AdminProductController extends Controller
     public function update(ProductFormRequest $request,$id){
         try{
             $product = Product::getByEid($id);
+            $product->update($request->input());
+            if( $product ){
+                $attrKeys = array_keys($request->product_attributes);
+                $attrData = $request->product_attributes;
+                $attrLabel = $request->product_attributes_label;
+                foreach( $attrKeys as $attrKey ){
+                    ProductAttribute::updateOrCreate(
+                        [
+                            'product_id' => $product->id,
+                            'key' => $attrKey,
+                        ],
+                        [
+                            'value' => $attrData[$attrKey],
+                            'label' => $attrLabel[$attrKey],
+                        ]
+                    );
+                }
+
+                if( $request->hasFile('image') ){
+                    $path = $request->file('image')->store('products', 'public');
+                    $storage_path = $path;
+                    // $data['image'] = $storage_path; 
+                    ProductImage::create([
+                        'product_id' => $product->id,
+                        'type' => ProductImage::TYPE_IMAGE,
+                        'source' => $storage_path,
+                    ]);
+                }
+
+            }
+
             // $role->update($request->input());
             Helper::successToast('Product has been updated successfully');
-            return redirect()->route('admin.product');
+            // return redirect()->route('admin.products');
+            return back();
         } catch(\Exception $e){
             Helper::errorToast();
             return back();
@@ -156,6 +204,33 @@ class AdminProductController extends Controller
         $data['title'] = 'Product Details';
         $data['action_url'] = route('admin.product');
         return view($this->show_view, $data);
+    }
+
+    public function updateImageSequence(Request $request,$id){
+        try{
+            if( isset($request->image_id) && (count($request->image_id)>0) ){
+                foreach($request->image_id as $key => $imageId){
+                    $sequence = $key + 1;
+                    ProductImage::where('id', $imageId)->update(['sequence' => $sequence]);
+                }
+                Helper::successToast('Image sequence has been updated successfully');
+            } else {
+                Helper::successToast('Images does not exist');
+            }
+            return back();
+        }catch(Exception $e){
+            Helper::errorToast();
+            return back();
+        }
+    }
+
+    public function removeProductImage(Request $request){
+        $image_id = $request->image_id;
+        ProductImage::where('id', $image_id)->delete();
+        return [
+            "status" => true,
+            'message' => 'Product image deleted successfully',
+        ];
     }
 
 }

@@ -42,12 +42,20 @@
 
         </div>
         
-        <table id="listingTable" class="table table-bordered p-0">
+        <table id="listingTable" class="table table-bordered p-0 datatable-nowrap">
             <thead>
                 <tr>
                     <th style="width: 1%">#</th>
                     <th>Name</th>
-                    <th>Status</th>
+                    <th>Price</th>
+                    <th>Min Increment</th>
+                    <th>Max Increment</th>
+                    <th class="no-sort">End Datetime</th>
+                    <th class="no-sort">Total Bids</th>
+                    <th class="no-sort">Last Bid</th>
+                    <th class="no-sort">Created At</th>
+                    <th class="no-sort">Can Bid</th>
+                    <th class="no-sort">Status</th>
                     <th class="no-sort" style="width: 100px">Action</th>
                 </tr>
             </thead>
@@ -114,7 +122,7 @@ myApp.listing = (function() {
                 // }
                 ],
                 "order": [[ 0, "desc" ]],
-                "scrollX": true,
+                // "scrollX": true,
                 processing: true,
                 serverSide: true,
                 ajax: {
@@ -125,6 +133,50 @@ myApp.listing = (function() {
                 columns: [
                     { data: 'id' },  
                     { data: 'name' },
+                    {   
+                        data: 'price',
+                        render: function(data, type, row) {
+                            return `${row.m_price}`;
+                        }
+                    },
+                    {   
+                        data: 'min_increment',
+                        render: function(data, type, row) {
+                            return `${row.m_min_increment}`;
+                        }
+                    },
+                    {   
+                        data: 'max_increment',
+                        render: function(data, type, row) {
+                            return `${row.m_max_increment}`;
+                        }
+                    },
+                    {   
+                        render: function(data, type, row) {
+                            return `${row.m_end_datetime}`;
+                        }
+                    },
+                    {   
+                        render: function(data, type, row) {
+                            return `${row.bids_count}`;
+                        }
+                    },
+                    {   
+                        render: function(data, type, row) {
+                            return `${row.last_bid_html}`;
+                        }
+                    },
+                    {   
+                        data: 'created_at',
+                        render: function(data, type, row) {
+                            return `${row.m_created_at}`;
+                        }
+                    },
+                    {   
+                        render: function(data, type, row) {
+                            return `${row.can_bid_html}`;
+                        }
+                    },
                     {   
                         render: function(data, type, row) {
                             return `${row.status_html}`;
@@ -138,7 +190,7 @@ myApp.listing = (function() {
                                 
                 ],
                 "drawCallback": function( settings ) {
-
+                    $(listingTableId).parent().addClass('col-datatable-overflow-x-scroll');
                 } //end drawcallback
             });
             

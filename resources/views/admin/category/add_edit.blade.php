@@ -13,7 +13,7 @@
             {{$title}}
         </x-slot>
         
-        <form action="{{$action_url}}" method="POST" class="needs-validation @if($errors->any()) was-validated @endif" novalidate>
+        <form action="{{$action_url}}" method="POST" enctype="multipart/form-data" class="needs-validation @if($errors->any()) was-validated @endif" novalidate>
             @csrf
 
             {{-- <input type="hidden" name="{{$user?'updated_by_id':'created_by_id'}}" value="{{auth()->user()->id}}"> --}}
@@ -46,6 +46,15 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="form-group col-12 mb-3">
+                    <label for="image" class="w-100 text-left">Image</label>
+                    <input type="file" class="form-control dropify" name="image" id="categoryImage" data-allowed-file-extensions="jpg png jpeg" data-max-file-size="1M" @if($user && $user->image) data-default-file="{{$user->m_image}}" @endif>
+                    @error('image')
+                        <div class="invalid-feedback"> {{$message}} </div>
+                    @enderror
+                </div>
+
                 <div class="col-12">
                     <hr>
                 </div>
@@ -105,7 +114,8 @@
 @endsection
 
 @push('scripts')
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.min.js"></script>
 <script>
 
 $(document).ready(function() {
@@ -121,11 +131,13 @@ $(document).ready(function() {
     /**
      * Ids
      */
-
+    const categoryImageId = '#categoryImage';
 
     /**
      * Variables
     */
+
+    $(categoryImageId).dropify();
 
     function getCustomFieldHtml(number){
         return `<div class="form-group px-1 col-12 mb-2 custom_field">

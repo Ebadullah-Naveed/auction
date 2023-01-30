@@ -11,9 +11,15 @@ class ProductImage extends Model
 
     protected $table = 'product_image';
     protected $guarded = ['id'];
-    public $timestamps = false;
+    protected $appends = ['image_url'];
+    // public $timestamps = false;
 
     const TYPE_IMAGE = 'image';
     const TYPE_VIDEO = 'video';
+
+    public function getImageUrlAttribute(){
+        return asset('storage/'.$this->source);
+    }
+
 
 }

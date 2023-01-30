@@ -88,7 +88,14 @@ class AdminCategoryController extends Controller
     public function store(CategoryFormRequest $request){
         try{
             $user = Category::create($request->input());
-            
+
+            if( $request->hasFile('image') ){
+                $path = $request->file('image')->store('category', 'public');
+                $storage_path = $path;
+                // $data['image'] = $storage_path; 
+                $user->update(['image'=>$storage_path]);
+            }
+
             Helper::successToast('Category has been added successfully');
             return redirect()->route('admin.category');
         } catch(\Exception $e){
@@ -110,7 +117,16 @@ class AdminCategoryController extends Controller
     public function update(CategoryFormRequest $request,$id){
         try{
             $role = Category::getByEid($id);
-            $role->update($request->input());
+            $data = $request->input();
+
+            if( $request->hasFile('image') ){
+                $path = $request->file('image')->store('category', 'public');
+                $storage_path = $path;
+                $data['image'] = $storage_path; 
+            }
+
+            $role->update($data);
+
             Helper::successToast('Category has been updated successfully');
             return redirect()->route('admin.category');
         } catch(\Exception $e){

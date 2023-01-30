@@ -44,7 +44,7 @@ class CategoryFormRequest extends FormRequest
         }
         return [
             'name' => ['required','max:50','min:3','unique:category,name,'.$id],
-            'image' => ['nullable','image'],
+            'image' => ['nullable'],
         ];
     }
 

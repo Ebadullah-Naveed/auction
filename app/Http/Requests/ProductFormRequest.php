@@ -49,6 +49,7 @@ class ProductFormRequest extends FormRequest
             'end_datetime' => ['required'],
             'short_desc' => ['nullable','max:255'],
             'terms' => ['nullable','max:1000'],
+            'image' => ['nullable'],
         ];
     }
 

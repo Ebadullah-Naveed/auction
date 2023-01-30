@@ -13,7 +13,7 @@ class Category extends BaseModel
     protected $table = 'category';
     protected $guarded = ['id'];
     // public $timestamps = false;
-    protected $appends = ['e_id','m_created_at','m_attribute_json'];
+    protected $appends = ['e_id','m_created_at','m_attribute_json','m_image'];
 
     const STATUS_ACTIVE  = 1;
     const STATUS_INACTIVE  = 0;
@@ -37,6 +37,13 @@ class Category extends BaseModel
 
     public function getMAttributeJsonAttribute(){
         return json_decode($this->attribute_json);
+    }
+
+    public function getMImageAttribute(){
+        if( $this->image && ($this->image!='') ){
+            return asset('storage/'.$this->image);
+        } 
+        return null;
     }
 
     static public function canOpenList() {

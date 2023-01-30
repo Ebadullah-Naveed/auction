@@ -13,13 +13,13 @@
             {{$title}}
         </x-slot>
         
-        <form action="{{$action_url}}" method="POST" class="needs-validation @if($errors->any()) was-validated @endif" novalidate>
+        <form action="{{$action_url}}" method="POST" enctype="multipart/form-data" class="needs-validation @if($errors->any()) was-validated @endif" novalidate>
             @csrf
 
             {{-- <input type="hidden" name="{{$product?'updated_by_id':'created_by_id'}}" value="{{auth()->user()->id}}"> --}}
-            @if($errors->any())
-    {{ implode('', $errors->all('<div>:message</div>')) }}
-@endif
+            {{-- @if($errors->any())
+                {{ implode('', $errors->all('<div>:message</div>')) }}
+            @endif --}}
             <div class="form-row">
                 <input type="hidden" name="product_id" value="{{$product?$product->id:''}}" >
                 <input type="hidden" name="category_id" value="{{$category->id}}" >
@@ -57,10 +57,9 @@
                     @enderror
                 </div>
 
-
                 <div class="form-group col-12 mb-2">
                     <label for="end_datetime" class="w-100 text-left">End Datetime <span class="text-danger">*</span> </label>
-                    <input type="text" class="form-control date-time-picker" name="end_datetime" value="2022/12/01 10:30" xvalue="{{$product?$product->end_datetime:old('end_datetime')}}" required>
+                    <input type="text" class="form-control date-time-picker" name="end_datetime" value="{{$product? Carbon\Carbon::parse($product->end_datetime)->isoFormat('YYYY/MM/DD HH:mm'):old('end_datetime')}}" required>
                     @error('end_datetime')
                         <div class="invalid-feedback"> {{$message}} </div>
                     @enderror
@@ -71,13 +70,21 @@
                     <h5 class="mb-2"> Attributes </h5>
                 </div>
 
+                @php
+                $productAttributes = $product->attributes;   
+                $arrangedAttributes = [];
+                foreach ($product->attributes as $key => $prodAttr) {
+                    $arrangedAttributes[$prodAttr->key] = $prodAttr->value;
+                }
+                @endphp
+
                 @foreach( $category->m_attribute_json as $attr )
                     <div class="form-group col-6 mb-2">
                         <input type="hidden" name="product_attributes_label[{{$attr->key}}]" value="{{$attr->label}}">
                         <label for="end_datetime" class="w-100 text-left">{{$attr->label}}  {!!($attr->required==1)?'<span class="text-danger">*</span>':''!!} </label>
                         <input type="text" class="form-control" 
                             name="product_attributes[{{$attr->key}}]"
-                            xvalue="{{($product&&($product))?$product->end_datetime:old('end_datetime')}}" 
+                            value="{{($product&&(isset($arrangedAttributes[$attr->key])))?$arrangedAttributes[$attr->key]:''}}" 
                             {{($attr->required==1)?'required':''}}
                         >
                     </div>
@@ -99,7 +106,15 @@
                     @enderror
                 </div>
 
-                <div class="form-group col-12 my-2 mb-2 pl-4">
+                <div class="form-group col-12 mb-2">
+                    <label for="image" class="w-100 text-left">Image</label>
+                    <input type="file" class="form-control dropify" name="image" id="productImage" data-allowed-file-extensions="jpg png jpeg" data-max-file-size="1M">
+                    @error('image')
+                        <div class="invalid-feedback"> {{$message}} </div>
+                    @enderror
+                </div>
+
+                <div class="form-group col-12 my-2 mb-4 pl-2">
                     <label for="status" class="xcol-form-label s-12 mr-4">Status</label>
                     <div class="d-flex justify-content-left align-items-center">
                         <div class="material-switch">
@@ -119,12 +134,86 @@
 
     </x-panel-card>
 
+    @if($product)
+    <x-panel-card class="col-md-12 mt-4 mb-5" >
+        <x-slot name="title">
+            Product Media
+        </x-slot>
+        
+        <form id="image_sequence_form" method="POST" action="{{route('product.image.update.sequence',['id'=>$product->id])}}">
+            @csrf
+            @if( count($product->images_by_sequence)>0 )
+            <div class="box-header with-border">
+                <div class="row pl-3 justify-content-start">
+                    <input type="submit" form="image_sequence_form" class="btn btn-sm mb-3 btn-success"
+                        id="image_sequence_form_submit"
+                        value="Update sequence">
+                    {{-- </button> --}}
+                </div>
+            </div>
+            @endif
+            <table class="table cursor-pointer table-bordered table-hover" style="width:100%;">
+                <thead>
+                    <tr>
+                        <th width="10px">Sequence</th>
+                        <th>Media</th>
+                        <th>Type</th>
+                        <th width="150px">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="sortable">
+                    @forelse ($product->images_by_sequence as $key => $image)
+                        <tr class="image_row">
+                            <td>
+                                <input type="hidden" name="image_id[]"
+                                    value="{{ $image->id }}">
+                                {{ $image->sequence }}
+                            </td>
+                            <td width="50%">
+                                @if ($image->source)
+                                    @if( ($image->type == App\Models\ProductImage::TYPE_IMAGE) )
+                                        <img style="height:100px" class="border" src="{{ $image->image_url }}">
+                                    @elseif( $event_image['type'] == App\Models\ProductImage::TYPE_VIDEO )
+                                        <video style="height:100px" controls>
+                                            <source src="{{ $image->image_url }}" type="video/mp4">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    @endif
+                                @endif
+                            </td>
+                            <td>
+                                {{ucfirst($image->type)}}
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-danger product_image_remove_btn"
+                                    data-image_id="{{ $image->id }}">
+                                    <i class="icon-trash"></i>
+                                </button>
+                            </td>
+
+                        </tr>
+                    @empty
+                        <tr>
+                            <td class="text-center" colspan="4">No record found</td>
+                        </tr>
+                    @endforelse
+
+                </tbody>
+            </table>
+        </form>
+
+    </x-panel-card>
+    @endif
+
 </div>
 
 @endsection
 
 @push('scripts')
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
 
 $(document).ready(function() {
@@ -136,15 +225,19 @@ $(document).ready(function() {
     const customFieldClass = '.custom_field';
     const addCustomFieldBtnClass = '.add_custom_field_btn'
     const deleteCustomFieldBtnClass = '.delete_custom_field_btn';
+    const sortableTableClass = '.sortable';
+    const productImageRemoveBtnClass = '.product_image_remove_btn';
 
     /**
      * Ids
      */
-
+    const productImageId = '#productImage';
 
     /**
      * Variables
     */
+
+    $(productImageId).dropify();
 
     function getCustomFieldHtml(number){
         return `<div class="form-group px-1 col-12 mb-2 custom_field">
@@ -188,6 +281,54 @@ $(document).ready(function() {
     $(document).on('click', deleteCustomFieldBtnClass, function(){
         $(this).parent().parent().parent().remove();
     });
+
+    $(sortableTableClass).sortable({
+        revert: true
+    });
+
+    $(document).on('click', productImageRemoveBtnClass, function() {
+        var image_id = $(this).data('image_id');
+        var that = $(this)
+        swal({
+            title: "Are you sure?",
+            text: "Once deleted, you will not be able to recover this Image!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+            if (willDelete) {
+                $('#loader').show()
+                // alert(image_id);
+                $.ajax({
+                    url: "{{route('product.image.delete')}}",
+                    type: 'POST',
+                    data: {
+                        "image_id": image_id,
+                        "type": 'product',
+                        '_token': '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if (response.status) {
+                            $(that).parent().parent().remove();
+                            $("#loader").fadeOut();
+                            if( $('.image_row').length == 0 ){
+                                $('.sortable').append(`<tr> <td class="text-center" colspan="4">No record found</td> </tr>`);
+                            }
+
+                        } else {
+                            $("#loader").fadeOut();
+                            swal({
+                                title: response.message,
+                                icon: "error"
+                            })
+                        }
+                    },
+                });
+            };
+        });
+    });
+
 
 });
 
