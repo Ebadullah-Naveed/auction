@@ -71,10 +71,12 @@
                 </div>
 
                 @php
-                $productAttributes = $product->attributes;   
-                $arrangedAttributes = [];
-                foreach ($product->attributes as $key => $prodAttr) {
-                    $arrangedAttributes[$prodAttr->key] = $prodAttr->value;
+                if(isset($product->attributes))
+                {
+                    $arrangedAttributes = [];
+                    foreach ($product->attributes as $key => $prodAttr) {
+                        $arrangedAttributes[$prodAttr->key] = $prodAttr->value;
+                    }
                 }
                 @endphp
 

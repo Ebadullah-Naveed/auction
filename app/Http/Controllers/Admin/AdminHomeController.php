@@ -13,7 +13,7 @@ class AdminHomeController extends Controller
 {
     public function index() {
 
-        $data['total_users'] = User::where('role_id',null)->count('id');
+        $data['total_users'] = User::where('role_id',3)->count('id');
 
         return view('admin.home',$data);
     }
