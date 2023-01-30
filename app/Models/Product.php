@@ -120,6 +120,13 @@ class Product extends Model
         }
     }
 
+    public function getViewBtnHtml(){
+        if( self::canEdit() ){
+            $link = route('admin.product.show',[ 'id' => $this->e_id ]);
+            return '<a href="'.$link.'" class="btn btn-primary btn-sm" title="View"><i class="icon icon-eye pr-0"></i> </a>';
+        }
+    }
+
     public function getStatusHtml(){
         if($this->status == self::STATUS_ACTIVE){
             return '<label class="badge badge-success">Active</label>';

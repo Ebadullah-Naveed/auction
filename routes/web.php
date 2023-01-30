@@ -59,6 +59,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('product/delete/{id}', [AdminProductController::class, 'destroy'])->name('admin.product.destroy');
     Route::get('product/show/{id}', [AdminProductController::class, 'show'])->name('admin.product.show');
 
+    Route::post('product/bids/fetch/{id}', [AdminProductController::class, 'fetchBids'])->name('admin.product.bids.fetch');
+
 
     Route::post('product/image/update/sequence/{id}', [AdminProductController::class, 'updateImageSequence'])->name('product.image.update.sequence');
     Route::post('product/image/delete', [AdminProductController::class, 'removeProductImage'])->name('product.image.delete');

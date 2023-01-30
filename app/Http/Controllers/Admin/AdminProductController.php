@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductAttribute;
 use App\Models\ProductImage;
+use App\Models\ProductBid;
 use App\Http\Requests\ProductFormRequest;
 use Helper;
 
@@ -42,9 +43,9 @@ class AdminProductController extends Controller
         ->addColumn('edit_btn', function($row){
             return $row->getEditBtnHtml();
         })
-        // ->addColumn('view_btn', function($row){
-        //     return $row->getViewBtnHtml();
-        // })
+        ->addColumn('view_btn', function($row){
+            return $row->getViewBtnHtml();
+        })
         ->addColumn('status_html', function($row){
             return $row->getStatusHtml();
         })
@@ -200,9 +201,15 @@ class AdminProductController extends Controller
     }
 
     public function show($id) {
+
+        if( ! Product::canView() ) {
+            return Helper::redirectUnauthorizedPermission();
+        }
+
         $data['product'] = Product::getByEid($id);
         $data['title'] = 'Product Details';
-        $data['action_url'] = route('admin.product');
+        $data['action_url'] = route('admin.products');
+        $data['product_bid_fetch'] = route('admin.product.bids.fetch',['id'=>$id]);
         return view($this->show_view, $data);
     }
 
@@ -231,6 +238,23 @@ class AdminProductController extends Controller
             "status" => true,
             'message' => 'Product image deleted successfully',
         ];
+    }
+
+    public function fetchBids(Request $request,$id) {
+
+        $with = ['user:id,name,email'];
+        $query = ProductBid::where('product_id',decrypt($id));
+
+        if( ($request->date_from != null) && ($request->date_to != '') && ($request->date_to != null) && ($request->date_to != '') ){
+            $query->whereRaw('DATE(`created_at`) BETWEEN "'.$request->date_from.'" AND "'.$request->date_to.'"');
+        }
+
+        // if( ($request->status != null) && ($request->status != '') ){
+        //     $query->where('status',$request->status);
+        // }
+
+        $query = $query->with($with);
+        return Datatables::of($query)->make(true);
     }
 
 }

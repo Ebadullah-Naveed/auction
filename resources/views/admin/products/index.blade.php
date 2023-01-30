@@ -184,7 +184,7 @@ myApp.listing = (function() {
                     },
                     {   
                         render: function(data, type, row) {
-                            return `${row.edit_btn}`;
+                            return `${row.edit_btn} ${row.view_btn}`;
                         }
                     },
                                 

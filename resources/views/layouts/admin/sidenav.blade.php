@@ -23,7 +23,7 @@ if( isset($page) ){
         @can(App\Models\Category::LIST_PERMISSION)
         <li class="@if( $pageName == 'category_management' ) nav-active @endif">
             <a href="{{route('admin.category')}}">
-                <i class="icon icon-users s-18"></i> 
+                <i class="icon icon-class s-18"></i> 
                 <span>Category Management</span> 
             </a>
         </li>
@@ -32,7 +32,7 @@ if( isset($page) ){
         @can(App\Models\Product::LIST_PERMISSION)
         <li class="@if( $pageName == 'product_management' ) nav-active @endif">
             <a href="{{route('admin.products')}}">
-                <i class="icon icon-users s-18"></i> 
+                <i class="icon icon-list3 s-18"></i> 
                 <span>Product Management</span> 
             </a>
         </li>
@@ -42,6 +42,15 @@ if( isset($page) ){
         <li class="@if( $pageName == 'user_management' ) nav-active @endif">
             <a href="{{route('admin.users')}}">
                 <i class="icon icon-users s-18"></i> 
+                <span>Users Management</span> 
+            </a>
+        </li>
+        @endif
+
+        @can(App\Models\User::LIST_PERMISSION)
+        <li class="@if( $pageName == 'user_management' ) nav-active @endif">
+            <a href="{{route('admin.users')}}">
+                <i class="icon icon-universal-access s-18"></i> 
                 <span>Admin Users Management</span> 
             </a>
         </li>
