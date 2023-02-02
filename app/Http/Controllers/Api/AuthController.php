@@ -112,7 +112,10 @@ class AuthController extends Controller
             {
                 return $this->response(false,null,'User registration failed',300);
             }
-            User::where('id',$user->id)->update(['status'=>1]);
+            if(env('APP_ENV') == 'stage')
+            {
+                User::where('id',$user->id)->update(['status'=>1]);
+            }
             return $this->response(true,null,'Your account is under review.',200);
         }
         catch(\Exception $e)
@@ -169,5 +172,4 @@ class AuthController extends Controller
     {
         User::where('id',$user)->update(['status'=>1]);
     }
-
 }

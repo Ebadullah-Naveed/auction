@@ -67,4 +67,16 @@ class ListingController extends Controller
         }
         return $this->response(true,$arr,'Car Make Fetched successfully',200);
     }
+
+    public function modelList($make){
+        $arr = [];
+        $att = Product::whereHas('attributes',function($o) use ($make){
+            $o->where('value',$make);
+        })->get();
+        foreach($att as $make)
+        {
+            $arr[] = $make->name;
+        }
+        return $this->response(true,$arr,'Car Model Fetched successfully',200);
+    }
 }

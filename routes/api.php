@@ -34,6 +34,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::group(['prefix'=>'product'], function () {
         Route::get('/', [ListingController::class,'index']);
         Route::get('/make',[ListingController::class,'makeList']);
+        Route::get('/model/{make}',[ListingController::class,'modelList']);
         Route::get('/{product}', [ListingController::class,'getProductById']);
     });
 
