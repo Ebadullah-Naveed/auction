@@ -47,9 +47,9 @@ class AuthController extends Controller
 
             if(auth()->user()->is_email_verified == 0 )
             {
-                auth()->user()->update(['otp'=>"0000"]);
+                auth()->user()->update(['otp'=>rand(1000,9999)]);
                 $this->sendEmail(auth()->user()->email,new OtpMail(auth()->user()->otp));
-                return $this->response(true,['otp'=>auth()->user()->otp],'Otp generated successfully',200);
+                return $this->response(true,null,'Otp generated successfully',200);
             }
             auth()->user()->update(['last_login'=>date('Y-m-d h:i:s'),'last_login_ip'=>$this->get_client_ip()]);
             return $this->response(true,['token' => $token],'Login successfully',200);
