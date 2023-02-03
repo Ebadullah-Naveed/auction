@@ -27,20 +27,20 @@ Route::controller(AuthController::class)->group(function () {
     Route::get('active/{user}', 'activeUser');
 });
 
-Route::group(['middleware' => 'auth:api'], function () {
-    Route::get('home', [HomeController::class,'index']);
 
-    //Product listing routes
-    Route::group(['prefix'=>'product'], function () {
-        Route::get('/', [ListingController::class,'index']);
-        Route::get('/make',[ListingController::class,'makeList']);
-        Route::get('/model/{make}',[ListingController::class,'modelList']);
-        Route::get('/{product}', [ListingController::class,'getProductById']);
-    });
+Route::get('home', [HomeController::class,'index']);
 
-    //Bid routes
-    Route::group(['prefix'=>'bid'], function () {
-        Route::get('/', [BidController::class,'index']);
-        Route::post('/place', [BidController::class,'bidProduct']);
-    });
+//Product listing routes
+Route::group(['prefix'=>'product'], function () {
+    Route::get('/', [ListingController::class,'index']);
+    Route::get('/make',[ListingController::class,'makeList']);
+    Route::get('/model/{make}',[ListingController::class,'modelList']);
+    Route::get('/{product}', [ListingController::class,'getProductById']);
 });
+
+//Bid routes
+Route::group(['prefix'=>'bid'], function () {
+    Route::get('/', [BidController::class,'index']);
+    Route::post('/place', [BidController::class,'bidProduct']);
+});
+
