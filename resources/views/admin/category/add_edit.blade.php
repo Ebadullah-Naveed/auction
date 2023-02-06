@@ -83,7 +83,8 @@
                                 <label for="message" class="w-100 text-left">Type <span class="text-danger">*</span> </label>
                                 <select class="form-control" name="custom_field[type][]" required>
                                     <option value="">--select--</option>
-                                    <option value="text" selected>Text</option>
+                                    <option value="text" {{$item->type=='text'?'selected':''}}>Text</option>
+                                    <option value="file" {{$item->type=='file'?'selected':''}}>File</option>
                                 </select>
                             </div>
                             <div class="col-1">
@@ -163,6 +164,7 @@ $(document).ready(function() {
                             <select class="form-control" name="custom_field[type][]" required>
                                 <option value="">--select--</option>
                                 <option value="text">Text</option>
+                                <option value="file">File</option>
                             </select>
                         </div>
                         <div class="col-1">

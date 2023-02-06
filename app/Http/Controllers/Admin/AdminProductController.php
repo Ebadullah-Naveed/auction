@@ -165,13 +165,21 @@ class AdminProductController extends Controller
                 $attrData = $request->product_attributes;
                 $attrLabel = $request->product_attributes_label;
                 foreach( $attrKeys as $attrKey ){
+
+                    if( $request->product_attributes[$attrKey]->isFile() ){
+                        $attrFilePath = $request->product_attributes[$attrKey]->store('products','public');
+                        $attrValue = asset('storage/'.$attrFilePath);
+                    } else {
+                        $attrValue = $attrData[$attrKey];
+                    }
+
                     ProductAttribute::updateOrCreate(
                         [
                             'product_id' => $product->id,
                             'key' => $attrKey,
                         ],
                         [
-                            'value' => $attrData[$attrKey],
+                            'value' => $attrValue,
                             'label' => $attrLabel[$attrKey],
                         ]
                     );
@@ -195,6 +203,7 @@ class AdminProductController extends Controller
             // return redirect()->route('admin.products');
             return back();
         } catch(\Exception $e){
+            dd($e);
             Helper::errorToast();
             return back();
         }
