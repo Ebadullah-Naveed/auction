@@ -18,6 +18,8 @@ class BidController extends Controller
     public function bidProduct(Request $request)
     {
         $product = Product::where('id',$request->product_id)->first();
+        $productPrice = $product->last_bid ?? $product->price;
+        $bidPrice = $request->amount+$productPrice;
         if(Carbon::now() > Carbon::parse($product->end_datetime))
         {
             return $this->response(false,null,'Bid is now closed',422);
@@ -31,7 +33,7 @@ class BidController extends Controller
             $bid = ProductBid::create([
                 'user_id' => auth()->user()->id,
                 'product_id' => $request->product_id,
-                'amount' => $request->amount
+                'amount' => $request->amount+$productPrice
             ]);
             $newDateTime = Carbon::now()->addMinutes(4);
             if($newDateTime > Carbon::parse($product->end_datetime))
@@ -45,7 +47,7 @@ class BidController extends Controller
             $bid = ProductBid::create([
                 'user_id' => auth()->user()->id,
                 'product_id' => $request->product_id,
-                'amount' => $request->amount
+                'amount' => $request->amount+$productPrice
             ]);
             $newDateTime = Carbon::now()->addMinutes(4);
             if($newDateTime > Carbon::parse($product->end_datetime))
@@ -58,7 +60,7 @@ class BidController extends Controller
         {
             return $this->response(false,null,'Invalid Amount',422);
         }
-
+        // Product::where('id',$request->product_id)->update(['last_bid'=>$request->amount+$productPrice]);
         return $this->response(true,$bid,'Bid placed successfully',200);
     }
 }
