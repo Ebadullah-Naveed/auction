@@ -33,9 +33,9 @@
             <dt>Date Joined</dt>
             <dd>{{$user->m_created_at}}</dd>
 
-            <dt>NIC image</dt>
+            {{-- <dt>NIC image</dt>
             <dd><img src="{{$user->cnic_front_image}}" alt="" width=200px>
-            <img src="{{$user->cnic_back_image}}" alt="" width=200px></dd>
+            <img src="{{$user->cnic_back_image}}" alt="" width=200px></dd> --}}
 
             <dt>Status</dt>
             <dd>{!! $user->getStatusHtml() !!}</dd>

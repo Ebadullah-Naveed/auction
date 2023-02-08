@@ -13,7 +13,7 @@ class ListingController extends Controller
         $category_id = Category::where('slug',$request->slug)->value('id');
         $orderBy = $request->orderBy ?? 'id';
         $orderByValue =  $request->orderByValue ?? 'asc';
-        $query = Product::where('category_id',$category_id)->with('images')->orderBy($orderBy,$orderByValue);
+        $query = Product::where('category_id',$category_id)->whereDate('end_datetime','>',date('Y-m-d h:i:s'))->with('images')->orderBy($orderBy,$orderByValue);
         if($request->has('car_type'))
         {
             $query->whereHas('attributes',function($o){

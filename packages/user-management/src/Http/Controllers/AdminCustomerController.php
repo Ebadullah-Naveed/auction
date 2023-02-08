@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
 use App\Models\User;
 use App\Models\Role;
-use App\Http\Requests\UserFormRequest;
+use App\Http\Requests\CustomerFormRequest;
 use Helper;
 use App\Models\Customer;
 use App\Models\Account;
@@ -19,10 +19,14 @@ use App\Models\ParserLog;
 use App\Models\UserRoundUp;
 use App\Models\Activity\Transaction;
 use App\Models\Activity\RequestLog;
+use App\Traits\EmailTrait;
+use App\Mail\UserLoginStatusMail;
 
 class AdminCustomerController extends Controller
 {
-    
+
+    use EmailTrait;
+
     public $module_title = 'Customers';
     public $listing_view = 'user-management::customers.index';
     public $add_edit_view = 'user-management::customers.add_edit';
@@ -31,7 +35,7 @@ class AdminCustomerController extends Controller
     public function index(){
 
         //checking edit permission
-        if( ! Customer::canOpenList() ) {
+        if( ! User::canOpenList('customer') ) {
             return Helper::redirectUnauthorizedPermission();
         }
 
@@ -53,29 +57,13 @@ class AdminCustomerController extends Controller
         ->addColumn('status_html', function($row){
             return $row->getStatusHtml();
         })
-        ->addColumn('is_phone_verified_html', function($row){
-            return $row->getIsPhoneVerifiedHtml();
-        })
         ->addColumn('is_email_verified_html', function($row){
             return $row->getIsEmailVerifiedHtml();
-        })
-        ->addColumn('is_kyc_completed_html', function($row){
-            return $row->customer?$row->customer->getIsKycCompletedHtml():'';
-        })
-        // ->addColumn('roundup_status_html', function($row){
-        //     return $row->customer?$row->customer->account->getRoundupStatusHtml():'';
-        // })
-        ->addColumn('total_goal_html', function($row){
-            return $row->getTotalGoalHtml();
         })
         ->rawColumns([
             'view_btn',
             'status_html',
-            'is_phone_verified_html',
             'is_email_verified_html',
-            'is_kyc_completed_html',
-            // 'roundup_status_html',
-            'total_goal_html'
         ])
         ->addIndexColumn()
         ->make(true);
@@ -83,15 +71,11 @@ class AdminCustomerController extends Controller
 
     private function getModelCollection($request, $with=[]){
         $with = array_merge([], $with);
-        $query = User::where('role_id',null);
+        $query = User::where('role_id',Role::CUSTOMER);
                     // ->whereHas('user_document');
 
         if( ($request->status != null) && ($request->status != '') ){
             $query->where('status',$request->status);
-        }
-
-        if( ($request->is_phone_verified != null) && ($request->is_phone_verified != '') ){
-            $query->where('is_phone_verified',$request->is_phone_verified);
         }
 
         if( ($request->is_email_verified != null) && ($request->is_email_verified != '') ){
@@ -114,19 +98,33 @@ class AdminCustomerController extends Controller
     //     return view($this->show_view, $data);
     // }
 
-    public function updateStatus(Request $request,$id){
+    public function show($id) {
+        $data['user'] = User::where(['id'=>decrypt($id),'role_id'=>Role::CUSTOMER])->first();
+        $data['title'] = 'Customer Details';
+        $data['action_url'] = route('admin.customers');
+        $data['update_status_url'] = route('admin.customer.update.status',['id'=>$data['user']->e_id]);
+        return view($this->show_view, $data);
+    }
 
-        if( ! Customer::canEdit() ) {
+    public function updateStatus(Request $request,$id){
+        if( ! User::canEdit('customer') ) {
             return Helper::redirectUnauthorizedPermission();
         }
-
+        
         $user = User::getByEid($id);
         if( $request->status == User::STATUS_ACTIVE ){
-            $user->is_active = User::STATUS_ACTIVE;
+            $user->status = User::STATUS_ACTIVE;
         } else {
-            $user->is_active = User::STATUS_INACTIVE;
+            $user->status = User::STATUS_INACTIVE;
         }
         $user->save();
+
+        try{
+            //Sending mail to user
+            $this->sendEmail($user->email,new UserLoginStatusMail($user->name,$user->phone_number,$user->status));
+        } catch(\Exception $e){
+
+        }
 
         Helper::successToast('User status has been updated successfully');
         return back();

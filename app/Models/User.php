@@ -31,6 +31,12 @@ class User extends Authenticatable implements JWTSubject
     const EDIT_PERMISSION = 'edit-admin-user';
     const DELETE_PERMISSION = 'delete-admin-user';
 
+    const CUSTOMER_LIST_PERMISSION = 'list-customer';
+    const CUSTOMER_VIEW_PERMISSION = 'view-customer';
+    const CUSTOMER_ADD_PERMISSION = 'add-customer';
+    const CUSTOMER_EDIT_PERMISSION = 'edit-customer';
+    const CUSTOMER_DELETE_PERMISSION = 'delete-customer';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -94,7 +100,7 @@ class User extends Authenticatable implements JWTSubject
             return Carbon::parse($value)
             ->isoFormat('DD MMM YYYY, h:mm a');
         }
-        return '-';
+        return 'n/a';
     }
 
     public function getMDateJoinedAttribute() {
@@ -106,20 +112,36 @@ class User extends Authenticatable implements JWTSubject
         return Carbon::parse($this->date_joined??$this->created_at)->isoFormat('DD MMM YYYY');
     }
 
-    static public function canOpenList() {
-        return ( auth()->user()->can(self::LIST_PERMISSION) );
+    static public function canOpenList($customer=null) {
+        if( $customer == 'customer' ){
+            return ( auth()->user()->can(self::CUSTOMER_LIST_PERMISSION) );
+        } else {
+            return ( auth()->user()->can(self::LIST_PERMISSION) );
+        }
     }
 
-    static public function canAdd(){
-        return ( auth()->user()->can(self::ADD_PERMISSION) );
+    static public function canAdd($customer=null){
+        if( $customer == 'customer' ){
+            return ( auth()->user()->can(self::CUSTOMER_ADD_PERMISSION) );
+        } else {
+            return ( auth()->user()->can(self::ADD_PERMISSION) );
+        }
     }
 
-    static public function canEdit(){
-        return ( auth()->user()->can(self::EDIT_PERMISSION) );
+    static public function canEdit($customer=null){
+        if( $customer == 'customer' ){
+            return ( auth()->user()->can(self::CUSTOMER_EDIT_PERMISSION) );
+        } else {
+            return ( auth()->user()->can(self::EDIT_PERMISSION) );
+        }
     }
 
-    static public function canView(){
-        return ( auth()->user()->can(self::VIEW_PERMISSION) );
+    static public function canView($customer=null){
+        if( $customer == 'customer' ){
+            return ( auth()->user()->can(self::CUSTOMER_VIEW_PERMISSION) );
+        } else {
+            return ( auth()->user()->can(self::VIEW_PERMISSION) );
+        }
     }
 
     public function getEditBtnHtml(){
@@ -132,6 +154,14 @@ class User extends Authenticatable implements JWTSubject
     public function getViewBtnHtml() {
         if( self::canView() ){
             $link = route('admin.users.show', [ 'id' => $this->e_id ] );
+            return '<a href="'.$link.'" class="btn btn-primary btn-sm" title="View Details"><i class="icon icon-eye pr-0"></i> </a>';
+        }
+        return '';
+    }
+
+    public function getCustomerViewBtnHtml() {
+        if( self::canView() ){
+            $link = route('admin.customer.show', [ 'id' => $this->e_id ] );
             return '<a href="'.$link.'" class="btn btn-primary btn-sm" title="View Details"><i class="icon icon-eye pr-0"></i> </a>';
         }
         return '';

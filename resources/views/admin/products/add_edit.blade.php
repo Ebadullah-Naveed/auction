@@ -81,14 +81,24 @@
                 @endphp
 
                 @foreach( $category->m_attribute_json as $attr )
-                    <div class="form-group col-6 mb-2">
+                    <div class="form-group {{($attr->type == 'file')?'col-12':'col-6'}} mb-2">
                         <input type="hidden" name="product_attributes_label[{{$attr->key}}]" value="{{$attr->label}}">
                         <label for="end_datetime" class="w-100 text-left">{{$attr->label}}  {!!($attr->required==1)?'<span class="text-danger">*</span>':''!!} </label>
-                        <input type="text" class="form-control" 
-                            name="product_attributes[{{$attr->key}}]"
-                            value="{{($product&&(isset($arrangedAttributes[$attr->key])))?$arrangedAttributes[$attr->key]:''}}" 
-                            {{($attr->required==1)?'required':''}}
-                        >
+                        @if( $attr->type == 'file' )
+                            <input type="file" class="form-control" 
+                                name="product_attributes[{{$attr->key}}]" 
+                                {{($attr->required==1)?'required':''}}
+                            >
+                            @if( $product&&(isset($arrangedAttributes[$attr->key])) )
+                            <p>Uploaded File URL: <a href="{{$arrangedAttributes[$attr->key]}}" target="_blank"> {{$arrangedAttributes[$attr->key]}}</a> </p>
+                            @endif
+                        @else
+                            <input type="text" class="form-control" 
+                                name="product_attributes[{{$attr->key}}]"
+                                value="{{($product&&(isset($arrangedAttributes[$attr->key])))?$arrangedAttributes[$attr->key]:''}}" 
+                                {{($attr->required==1)?'required':''}}
+                            >
+                        @endif
                     </div>
                 @endforeach
 

@@ -1,4 +1,4 @@
-@extends('layouts.admin.app', [ 'page' => 'user', 'title'=> $title ])
+@extends('layouts.admin.app', [ 'page' => 'customer_management', 'title'=> $title ])
 
 @push('css')
 
@@ -25,15 +25,6 @@
             </div>
 
             <div class="col-md-4 col-lg-3">
-                <label class="col-form-label s-12">Phone Verification</label>
-                <select class="form-control r-0 light s-12 filter_dropdown" id="isPhoneVerified">
-                    <option value="">All</option>
-                    <option value="1">Verified</option>
-                    <option value="0">Not Verified</option>
-                </select>
-            </div>
-
-            <div class="col-md-4 col-lg-3">
                 <label class="col-form-label s-12">Email Verification</label>
                 <select class="form-control r-0 light s-12 filter_dropdown" id="isEmailVerified">
                     <option value="">All</option>
@@ -56,17 +47,14 @@
             <thead>
                 <tr>
                     <th style="width: 1%">#</th>
-                    <th class="no-sort">Name</th>
-                    <th class="no-sort">Email</th>
-                    <th class="no-sort">Mobile Number</th>
+                    <th xclass="no-sort">Name</th>
+                    <th xclass="no-sort">Email</th>
+                    <th xclass="no-sort">Phone Number</th>
+                    <th xclass="no-sort">Username</th>
+                    <th class="no-sort">CNIC</th>
                     <th class="no-sort">OTP</th>
-                    {{-- <th class="no-sort">Date Joined</th> --}}
                     <th class="no-sort">Last Login</th>
-                    <th class="no-sort">Goals</th>
-                    {{-- <th>Roundup</th> --}}
-                    <th>Phone Verified</th>
                     <th>Email Verified</th>
-                    <th>KYC</th>
                     <th>Status</th>
                     <th style="width: 10px">Action</th>
                 </tr>
@@ -107,7 +95,6 @@ myApp.listing = (function() {
      */
     const listingTableId = '#listingTable';
     const statusId = '#status';
-    const isPhoneVerifiedId = '#isPhoneVerified';
     const isEmailVerifiedId = '#isEmailVerified';
 
     const private = (function() {
@@ -117,12 +104,11 @@ myApp.listing = (function() {
 
             let url = "{{$listing_fetch_url}}";
             let status = $(statusId).val();
-            let is_phone_verified = $(isPhoneVerifiedId).val();
             let is_email_verified = $(isEmailVerifiedId).val();
 
             const params = {
                 "_token": "{{ csrf_token() }}",
-                status, is_phone_verified, is_email_verified
+                status, is_email_verified
             }
             
             $(listingTableId).DataTable({
@@ -134,7 +120,7 @@ myApp.listing = (function() {
                     "order": []
                 },
                 {
-                    "targets": [6,7,8,9,10,11],
+                    "targets": [0,7,8,9,10],
                     "className": "text-center"
                 }],
                 // "scrollX": true,
@@ -152,63 +138,54 @@ myApp.listing = (function() {
                         }
                     },  
                     {
+                        data: 'name',
                         render: function(data,type,row) {
-                            return row.user_document?row.user_document.full_name:'-';
+                            return row.name;
                         }
                     },
                     {
+                        data: 'email',
                         render: function(data,type,row) {
-                            if( row.user_document && (row.user_document.email!=null) && (row.user_document.email!='') ){
-                                let email = row.user_document.email;
-                                let emailTruncated = email.substring(0, 16)+(email.length>16?'...':'');
-                                return `<span title="${email}">${emailTruncated}</span>`;
-                            }
-                            return '';
+                            return row.email;
                         }
                     },
-                    { data: 'phone_number' },
+                    {
+                        data: 'phone_number',
+                        render: function(data,type,row) {
+                            return row.phone_number;
+                        }
+                    },
+                    {
+                        data: 'username',
+                        render: function(data,type,row) {
+                            return row.username;
+                        }
+                    },
+                    {
+                        data: 'cnic',
+                        render: function(data,type,row) {
+                            return row.cnic;
+                        }
+                    },
                     { data: 'otp' },
-                    // { data: 'date_joined',
-                    //     render: function(data,type,row){
-                    //         return row.m_date_joined;
-                    //     }
-                    // },
                     {
                         render: function( data, type, row ) {
                             return `${row.last_login??'-'} <br> ${row.last_login_ip??''}`;
                         }
                     },
                     {   
-                        render: function(data, type, row) {
-                            return `${row.total_goal_html}`;
-                        }
-                    },
-                    // {   
-                    //     render: function(data, type, row) {
-                    //         return `${row.roundup_status_html}`;
-                    //     }
-                    // },
-                    {   
-                        render: function(data, type, row) {
-                            return `${row.is_phone_verified_html}`;
-                        }
-                    },
-                    {   
+                        data: 'is_email_verified',
                         render: function(data, type, row) {
                             return `${row.is_email_verified_html}`;
                         }
                     },
                     {   
-                        render: function(data, type, row) {
-                            return `${row.is_kyc_completed_html}`;
-                        }
-                    },
-                    {   
+                        data: 'status',
                         render: function(data, type, row) {
                             return `${row.status_html}`;
                         }
                     },
-                    {   
+                    { 
                         render: function(data, type, row) {
                             return `${row.view_btn}`;
                         }
