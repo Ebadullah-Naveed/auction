@@ -11,7 +11,7 @@ class BidController extends Controller
 {
     public function index(Request $request)
     {
-        $bid = ProductBid::where('user_id',auth()->user()->id)->with('product.images')->orderBy('amount','desc')->get()->unique('product_id');
+        $bid = ProductBid::where('user_id',auth()->user()->id)->with('product.images')->orderBy('amount','desc')->get();
         return $this->response(true,$bid,'Bid fetched successfully',200);
     }
 
