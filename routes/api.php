@@ -39,7 +39,7 @@ Route::group(['prefix'=>'product'], function () {
 });
 
 //Bid routes
-Route::group(['prefix'=>'bid'], function () {
+Route::group(['prefix'=>'bid' , 'middleware'=>'auth:api'], function () {
     Route::get('/', [BidController::class,'index']);
     Route::post('/place', [BidController::class,'bidProduct']);
 });
