@@ -11,22 +11,27 @@ class BidController extends Controller
 {
     public function index(Request $request)
     {
-        $bid = ProductBid::where('user_id',auth()->user()->id)->with('product.images')->orderBy('amount','desc')->get();
+        $bid = ProductBid::where('user_id',auth()->user()->id)->with('product.images')->orderBy('amount','desc')->get()->unique('product_id')->values();
         return $this->response(true,$bid,'Bid fetched successfully',200);
     }
 
     public function bidProduct(Request $request)
     {
         $product = Product::where('id',$request->product_id)->first();
-        $productPrice = $product->last_bid ?? $product->price;
+        if(!$product)
+        {
+            return $this->response(false,null,'Invalid Product Id',422);
+        }
+        $latestBid = ProductBid::where('product_id',$request->product_id)->orderBy('created_at','DESC')->first();
+        if($latestBid != null && auth()->user()->id == $latestBid->user_id)
+        {
+            return $this->response(false,null,'You have placed the last bid on this product',422);
+        }
+        $productPrice = $latestBid->amount ?? $product->price;
         $bidPrice = $request->amount+$productPrice;
         if(Carbon::now() > Carbon::parse($product->end_datetime))
         {
             return $this->response(false,null,'Bid is now closed',422);
-        }
-        if(!$product)
-        {
-            return $this->response(false,null,'Invalid Product Id',422);
         }
         if($product->min_increment == 0 && $product->max_increment == 0)
         {
