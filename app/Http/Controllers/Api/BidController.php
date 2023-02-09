@@ -38,10 +38,11 @@ class BidController extends Controller
             $bid = ProductBid::create([
                 'user_id' => auth()->user()->id,
                 'product_id' => $request->product_id,
-                'amount' => $request->amount+$productPrice
+                'amount' => $bidPrice
             ]);
-            $newDateTime = Carbon::now()->addMinutes(4);
-            if($newDateTime > Carbon::parse($product->end_datetime))
+            $now = Carbon::now();
+            $endTime = Carbon::parse($product->end_datetime);
+            if($endTime->diffInMinutes($now, true) <= 4)
             {
                 $newEndTime = Carbon::parse($product->end_datetime)->addMinutes(5);
                 Product::where('id',$request->product_id)->update(['end_datetime' => $newEndTime]);
@@ -52,10 +53,11 @@ class BidController extends Controller
             $bid = ProductBid::create([
                 'user_id' => auth()->user()->id,
                 'product_id' => $request->product_id,
-                'amount' => $request->amount+$productPrice
+                'amount' => $bidPrice
             ]);
-            $newDateTime = Carbon::now()->addMinutes(4);
-            if($newDateTime > Carbon::parse($product->end_datetime))
+            $now = Carbon::now();
+            $endTime = Carbon::parse($product->end_datetime);
+            if($endTime->diffInMinutes($now, true) <= 4)
             {
                 $newEndTime = Carbon::parse($product->end_datetime)->addMinutes(5);
                 Product::where('id',$request->product_id)->update(['end_datetime' => $newEndTime]);
