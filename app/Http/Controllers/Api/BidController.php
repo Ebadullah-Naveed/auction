@@ -60,7 +60,6 @@ class BidController extends Controller
         {
             return $this->response(false,null,'Invalid Amount',422);
         }
-        // Product::where('id',$request->product_id)->update(['last_bid'=>$request->amount+$productPrice]);
         return $this->response(true,$bid,'Bid placed successfully',200);
     }
 }
