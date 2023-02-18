@@ -166,7 +166,7 @@ class AdminProductController extends Controller
                 $attrLabel = $request->product_attributes_label;
                 foreach( $attrKeys as $attrKey ){
 
-                    if( $request->product_attributes[$attrKey]->isFile() ){
+                    if( is_file($request->product_attributes[$attrKey]) ){
                         $attrFilePath = $request->product_attributes[$attrKey]->store('products','public');
                         $attrValue = asset('storage/'.$attrFilePath);
                     } else {
