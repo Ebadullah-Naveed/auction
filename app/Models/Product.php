@@ -156,9 +156,9 @@ class Product extends Model
     public function getLastBidAttribute(){
         $latestBid = ProductBid::where('product_id',$this->id)->orderBy('created_at','DESC')->first();
         if( $latestBid ){
-            return $latestBid->m_amount.'<br>'.$latestBid->m_created_at;
+            return $latestBid->m_amount;
         }
-        return '-';
+        return null;
     }
 
 }
