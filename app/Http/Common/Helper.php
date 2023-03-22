@@ -9,6 +9,7 @@ use App\Models\Setting;
 use DB;
 use Carbon\Carbon;
 use Response;
+use App\Events\GeneralEvent;
 
 class Helper {
 
@@ -51,4 +52,15 @@ class Helper {
         return redirect()->route('home');
     }
 
+    function generalEvent($data)
+    {
+        try {
+            $data = json_encode($data);
+            GeneralEvent::dispatch($data);
+            return $data;
+        } catch (Exception $e) {
+            //return nothing
+            \Log::alert("Something went wrong! General-Event "."File: ".$e->getFile().' '.$e->getLine());
+        }
+    }
 }

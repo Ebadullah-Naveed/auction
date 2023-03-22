@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\{Category,Product,ProductBid};
 use Carbon\Carbon;
 use DB;
+use Helper;
 
 class BidController extends Controller
 {
@@ -97,6 +98,12 @@ class BidController extends Controller
                 return $this->response(false,null,'Invalid Amount',422);
             }
             DB::commit();
+            $data = [
+                'product_id' => $request->product_id,
+                'last_bid' => $bidPrice
+            ];
+            $helper = new Helper;
+            $helper->generalEvent($data);
             return $this->response(true,$bid,'Bid placed successfully',200);
         }
         catch(\Exception $e){

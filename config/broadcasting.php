@@ -38,9 +38,9 @@ return [
             'options' => [
                 'cluster' => env('PUSHER_APP_CLUSTER'),
                 'encrypted' => false,
-                'host' => 'stagewback.invision.tk',
+                'host' => 'auction.test',
                 'port' => 6001,
-                'scheme' => 'https',
+                'scheme' => 'http',
             ],
         ],
 
