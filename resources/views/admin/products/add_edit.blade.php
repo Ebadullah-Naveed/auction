@@ -87,7 +87,9 @@
                         @if( $attr->type == 'file' )
                             <input type="file" class="form-control" 
                                 name="product_attributes[{{$attr->key}}]" 
-                                {{($attr->required==1)?'required':''}}
+                                @if( !$product )
+                                    {{($attr->required==1)?'required':''}}
+                                @endif
                             >
                             @if( $product&&(isset($arrangedAttributes[$attr->key])) )
                             <p>Uploaded File URL: <a href="{{$arrangedAttributes[$attr->key]}}" target="_blank"> {{$arrangedAttributes[$attr->key]}}</a> </p>
