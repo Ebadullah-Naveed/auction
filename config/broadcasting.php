@@ -38,9 +38,9 @@ return [
             'options' => [
                 'cluster' => env('PUSHER_APP_CLUSTER'),
                 'encrypted' => false,
-                'host' => 'auction.test',
+                'host' => env('SOCKET_HOST'),
                 'port' => 6001,
-                'scheme' => 'http',
+                'scheme' => env('SOCKET_SCHEMA'),
             ],
         ],
 
