@@ -56,6 +56,10 @@ class Product extends Model
         return $this->hasMany('App\Models\ProductBid','product_id');
     }
 
+    public function product_deposit(){
+        return $this->hasMany('App\Models\ProductDeposit','product_id');
+    }
+
     public function getMPriceAttribute(){
         return 'Rs '.number_format($this->price);
     }

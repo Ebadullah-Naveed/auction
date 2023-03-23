@@ -15,10 +15,12 @@ return new class extends Migration
     {
         Schema::create('wallet_logs', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('wallet_id')->constrained('wallets');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('product_id')->constrained('products')->nullable();
             $table->enum('type',['credited','debited'])->notNullable();
-            $table->float('amount');
-            $table->longText('server_response')->nullable();
+            $table->double('amount');
+            $table->longText('json_response')->nullable();
             $table->timestamps();
         });
     }

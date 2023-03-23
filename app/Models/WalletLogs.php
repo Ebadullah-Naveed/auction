@@ -12,4 +12,8 @@ class WalletLogs extends Model
     protected $guarded = [
         'id'
     ];
+
+    const TYPE_CREDIT = 'credited';
+    const TYPE_DEBIT = 'debited';
+
 }

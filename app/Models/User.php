@@ -86,6 +86,10 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany('App\Models\Product','user_id');
     }
 
+    public function product_deposit(){
+        return $this->hasMany('App\Models\ProductDeposit','user_id');
+    }
+
     //Mutators and Accessors
     public function getImageAttribute() {
         return asset(self::DEFAULT_AVATAR);
