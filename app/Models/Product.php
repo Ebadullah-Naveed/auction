@@ -12,7 +12,7 @@ class Product extends Model
 
     protected $table = 'products';
     protected $guarded = ['id'];
-    protected $appends = ['e_id','m_price','m_min_increment','m_max_increment','m_created_at','m_end_datetime','bid','can_bid'];
+    protected $appends = ['e_id','m_price','m_min_increment','m_max_increment','m_created_at','m_end_datetime','bid','can_bid','last_bid'];
 
     const STATUS_PENDING = 0;
     const STATUS_ACTIVE = 1;
@@ -151,6 +151,14 @@ class Product extends Model
             return $latestBid->m_amount.'<br>'.$latestBid->m_created_at;
         }
         return '-';
+    }
+
+    public function getLastBidAttribute(){
+        $latestBid = ProductBid::where('product_id',$this->id)->orderBy('created_at','DESC')->first();
+        if( $latestBid ){
+            return $latestBid->m_amount;
+        }
+        return null;
     }
 
 }

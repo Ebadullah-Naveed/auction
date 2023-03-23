@@ -6,6 +6,8 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
+use DB;
+use App\Models\WalletLogs;
 
 class Controller extends BaseController
 {
@@ -51,5 +53,13 @@ class Controller extends BaseController
         else
             $ipaddress = 'UNKNOWN';
         return $ipaddress;
+    }
+
+    public function wallet($amount,$type,$response=null){
+        $wallet = auth()->user()->wallet()->first();
+        $balance = $type == 'credited' ? $wallet->balance + $amount : $wallet->balance - $amount;
+        $wallet->update(['balance'=> $balance]);
+        WalletLogs::create(['user_id'=>auth()->user()->id,'type'=>$type,'amount'=>$amount,'server_response'=>$response]);
+        return true;
     }
 }

@@ -212,4 +212,11 @@ class User extends Authenticatable implements JWTSubject
         return self::findOrFail($id);
     }
 
+    public function payments(){
+        return $this->hasMany(Payment::class);
+    }
+
+    public function wallet(){
+        return $this->hasOne(Wallet::class);
+    }
 }
