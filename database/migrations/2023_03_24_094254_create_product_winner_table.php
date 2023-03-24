@@ -13,15 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('product_deposit', function (Blueprint $table) {
+        Schema::create('product_winner', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('product_id')->constrained('products');
+            $table->foreignId('bid_id')->constrained('bids');
 
-            $table->double('amount');
+            $table->double('bid_amount');
 
-            $table->boolean('status')->default(0);
+            $table->boolean('status');
+            $table->boolean('is_notified')->default(0);
 
             $table->timestamps();
         });
@@ -34,6 +36,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('product_deposit');
+        Schema::dropIfExists('product_winner');
     }
 };
