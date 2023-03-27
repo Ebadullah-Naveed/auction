@@ -5,15 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductDeposit extends Model
+class ProductWinner extends Model
 {
     use HasFactory;
 
-    protected $table = 'product_deposit';
+    protected $table = 'product_winner';
 
-    const STATUS_DEPOSIT = 1;
-    const STATUS_RETURNED = 2;
-    const STATUS_WON = 3;
+    const STATUS_PENDING = 0;
+    const STATUS_PROCESSING = 1;
+    const STATUS_COMPLETED = 2;
+    const STATUS_CANCELLED = 3;
 
     public function user(){
         return $this->belongsTo('App\Models\User','user_id');
@@ -21,6 +22,10 @@ class ProductDeposit extends Model
 
     public function product(){
         return $this->belongsTo('App\Models\Product','product_id');
+    }
+
+    public function bid(){
+        return $this->belongsTo('App\Models\Bid','bid_id');
     }
 
 }
