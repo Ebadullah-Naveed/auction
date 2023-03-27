@@ -19,6 +19,7 @@ class BidController extends Controller
 
     public function bidProduct(Request $request)
     {
+        return auth()->user();
         try
         {
             DB::beginTransaction();
