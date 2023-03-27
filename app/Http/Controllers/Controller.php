@@ -59,7 +59,7 @@ class Controller extends BaseController
         $wallet = auth()->user()->wallet()->first();
         $balance = $type == 'credited' ? $wallet->balance + $amount : $wallet->balance - $amount;
         $wallet->update(['balance'=> $balance]);
-        WalletLogs::create(['user_id'=>auth()->user()->id,'type'=>$type,'amount'=>$amount,'server_response'=>$response]);
+        WalletLogs::create(['user_id'=>auth()->user()->id,'wallet_id'=>$wallet->id,'type'=>$type,'amount'=>$amount,'server_response'=>$response]);
         return true;
     }
 }
