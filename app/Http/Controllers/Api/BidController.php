@@ -47,13 +47,13 @@ class BidController extends Controller
                     }
                     if($amount > 0)
                     {
-                        $amount2 = $balance - $amount; 
-                        $this->wallet($amount2,'debited',json_decode($request));
+                        $amount2 = $balance - $amount;
+                        $this->wallet($amount2,'debited',json_decode($request),$product->id);
                     }
                 }
                 else
                 {
-                    $this->wallet($balance,'debited',json_decode($request));
+                    $this->wallet($balance,'debited',json_decode($request),$product->id);
                 }
             }
            
