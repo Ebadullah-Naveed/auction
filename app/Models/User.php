@@ -46,7 +46,7 @@ class User extends Authenticatable implements JWTSubject
        'id'
     ];
 
-    protected $appends = ['e_id','m_created_at','m_date_joined'];
+    protected $appends = ['e_id','m_created_at','m_date_joined','wallet'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -222,5 +222,9 @@ class User extends Authenticatable implements JWTSubject
 
     public function wallet(){
         return $this->hasOne(Wallet::class);
+    }
+
+    public function getWalletAttribute(){
+        return $this->wallet()->first();
     }
 }

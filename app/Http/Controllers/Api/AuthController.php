@@ -108,6 +108,8 @@ class AuthController extends Controller
                 'fcm_token' => $request->fcm_token
             ]);
 
+            \App\Models\Wallet::create(['user_id'=>$user->id]);
+
             if(!$user)
             {
                 return $this->response(false,null,'User registration failed',300);

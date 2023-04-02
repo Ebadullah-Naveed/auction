@@ -102,8 +102,8 @@ class BidController extends Controller
                 'product_id' => $request->product_id,
                 'last_bid' => $bidPrice
             ];
-            // $helper = new Helper;
-            // $helper->generalEvent($data);
+            $helper = new Helper;
+            $helper->generalEvent($data);
             return $this->response(true,$bid,'Bid placed successfully',200);
         }
         catch(\Exception $e){
